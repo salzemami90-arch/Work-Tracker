@@ -1,0 +1,826 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="request-token" content="preview-no-persistence">
+  <title>Work Tracker · Dashboard design review</title>
+  <style>:root{--paper:#f2f4f7;--white:#fbfcfe;--ink:#26323f;--muted:#737980;--accent:#2b4158;--accent-dark:#233549;--tint:#e5e9ee;--line:#dbe0e6;--amber:#a77432;--radius:18px;--shadow:0 6px 28px #26323f05;font-family:Inter,-apple-system,BlinkMacSystemFont,'Segoe UI',Arial,sans-serif;color:var(--ink);background:var(--paper);font-synthesis:none}
+*{box-sizing:border-box}body{margin:0;font-size:15px;line-height:1.6}button,input,textarea,select{font:inherit}button,a{touch-action:manipulation}button{cursor:pointer}button:disabled{cursor:default}a{color:inherit}h1,h2,h3,p{margin:0}h1{font-size:44px;letter-spacing:-1.7px;line-height:1.2;font-weight:600}h2{font-size:21px;letter-spacing:-.5px;font-weight:600;line-height:1.4}h3{font-size:18px;font-weight:600;line-height:1.4}a,button,input,textarea,summary{outline-offset:4px}a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #a77a3b}input:focus-visible,textarea:focus-visible{outline:2px solid #576a7e;outline-offset:1px}.icon{display:block;width:20px;height:20px;flex:0 0 auto}.button{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:11px 17px;border-radius:9px;border:1px solid transparent;font-size:13px;font-weight:600;text-decoration:none;white-space:nowrap;min-height:42px;transition:background .15s,box-shadow .15s}.primary{background:var(--accent);color:white;box-shadow:0 3px 7px #2b415810}.primary:hover{background:var(--accent-dark);box-shadow:0 4px 10px #2b415820}.secondary{background:var(--white);color:var(--ink);border-color:var(--line)}.secondary:hover{background:var(--tint)}.button:disabled{opacity:.55}.button .icon{width:17px;height:17px}.text-button{background:none;color:var(--accent);padding:7px 9px}.text-button:hover{background:var(--tint)}.icon-button{display:inline-grid;place-items:center;border:0;background:none;padding:7px;border-radius:8px;color:var(--muted)}.icon-button:hover{background:var(--tint);color:var(--accent)}.icon-button>span{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.skip-link{position:fixed;inset-block-start:10px;inset-inline-start:10px;transform:translateY(-160%);background:var(--accent);color:white;padding:10px 16px;border-radius:8px;z-index:10}.skip-link:focus{transform:translateY(0)}[hidden]{display:none!important}#app-header{border-bottom:1px solid var(--line);background:#fbfcfeec}.header-inner{max-width:1280px;min-height:84px;margin:auto;padding:0 44px;display:flex;align-items:center;gap:60px}.brand-link{display:flex;align-items:center;gap:11px;text-decoration:none}.brand-icon{display:grid;place-items:center;background:var(--accent);color:#f7f9fc;width:33px;height:33px;border-radius:10px;transform:rotate(-3deg)}.brand-icon .icon{width:19px;height:19px}.brand-word{font-size:17px;letter-spacing:-.5px;font-weight:650}.main-nav{display:flex;align-items:center;align-self:stretch}.nav-link{display:flex;align-items:center;position:relative;text-decoration:none;font-size:13px;color:var(--muted);padding-inline:4px}.nav-link.selected{color:var(--accent);font-weight:600}.nav-link.selected:after{content:'';height:2px;position:absolute;inset-block-end:-1px;inset-inline:0;background:var(--accent)}.header-end{margin-inline-start:auto;display:flex;align-items:center;gap:22px}.storage-status{display:flex;align-items:center;gap:7px;font-size:11px;color:var(--muted)}.status-dot{width:5px;height:5px;border-radius:50%;background:#697e94}.preview .status-dot{background:#bc964b}.language-button{padding:6px 10px;border:1px solid var(--line);border-radius:7px;background:transparent;font-size:12px;color:var(--ink)}.preview-strip{padding:7px 24px;background:#dbe5f0;color:#7c653f;text-align:center;font-size:11px;letter-spacing:.1px;border-bottom:1px solid #cad8e8}
+#main{max-width:1280px;margin:auto;padding:48px 44px 56px;min-height:70vh}#main:focus{outline:none}.workspace-hero,.project-hero{display:flex;align-items:center;justify-content:space-between;gap:28px;margin-bottom:32px}.eyebrow{font-size:10px;letter-spacing:1.8px;font-weight:650;color:#888f96;margin-bottom:12px}.hero-subtitle{font-size:14px;color:var(--muted);margin-top:13px;max-width:670px}.stats-row{display:grid;grid-template-columns:repeat(3,1fr);background:#e7ebef;border:1px solid #dce1e7;border-radius:13px;padding:22px 0;margin-bottom:42px}.stat{display:flex;align-items:center;gap:17px;padding:0 28px}.stat+.stat{border-inline-start:1px solid #d3d9e0}.stat-symbol{display:grid;place-items:center;background:#f1f4f8;border:1px solid #d9dfe6;color:#677482;width:44px;height:44px;border-radius:12px}.stat-symbol .icon{width:21px;height:21px}.stat-label{display:grid;grid-template-columns:auto 1fr;align-items:baseline;column-gap:17px;width:100%;font-size:12px;color:#6b727a}.stat-value{font-size:29px;line-height:1.15;font-weight:550;color:var(--ink);grid-column:2;grid-row:1/3;text-align:end;letter-spacing:-1px}.stat-sub{font-size:10px;color:#848c94}.overview-grid{display:grid;grid-template-columns:minmax(0,1fr) 285px;gap:30px;align-items:start}.section-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}.section-sub{font-size:12px;color:var(--muted);margin-top:5px}.badge{display:inline-flex;align-items:center;gap:5px;font-size:10px;line-height:1.5;font-weight:500;border-radius:5px;padding:4px 8px;color:#505f70;background:#e8edf2;white-space:nowrap}.badge.active:before{content:'';width:4px;height:4px;border-radius:50%;background:#667f99}.badge.paused{background:#f6ecd9;color:#8e6b30}.badge.completed{background:#e8edf2;color:#596e85}.badge.neutral{background:transparent;color:#868b91;padding:0}.projects-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:18px}.project-card{position:relative;background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:22px 23px 0;box-shadow:var(--shadow);min-width:0;transition:box-shadow .2s,border-color .2s}.project-card:hover{border-color:#c3cbd4;box-shadow:0 8px 24px #35404b08}.project-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:17px}.project-icon{height:36px;width:36px;display:grid;place-items:center;border-radius:10px;background:#e4eaf0;color:#5e6e80}.tone-1 .project-icon{background:#f3eadd;color:#a48758}.tone-2 .project-icon{background:#e8edef;color:#6d8590}.project-title-link{text-decoration:none;display:block}.project-title-link h3{font-size:17px;letter-spacing:-.3px;overflow-wrap:anywhere}.project-title-link:hover{text-decoration:underline;text-decoration-color:#a4b4c5;text-underline-offset:4px}.project-description{font-size:12px;color:var(--muted);margin-top:8px;line-height:1.7;min-height:42px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}.project-counts{display:flex;align-items:center;gap:13px;flex-wrap:wrap;font-size:10px;color:#7c848c;margin-block:20px 16px}.project-counts>span{display:inline-flex;align-items:center;gap:5px}.project-counts .icon{width:13px;height:13px}.project-card-bottom{border-top:1px solid #e7ebf0;display:flex;align-items:center;justify-content:space-between;font-size:10px;color:#93999f;min-height:49px;gap:10px}.card-open{color:#5d6b79;padding:5px}.card-open .icon{width:17px;height:17px}.next-panel{background:#e4e9ee;border:1px solid #d9dfe6;border-radius:var(--radius);overflow:hidden;margin-top:0}.next-panel-heading{padding:26px 24px 21px}.next-mark{width:29px;height:29px;color:#687686;margin-bottom:15px}.next-mark .icon{width:27px;height:27px}.next-panel h2{font-size:19px}.next-panel-heading p{font-size:12px;color:#727d88;margin-top:8px;max-width:190px}.next-card{display:block;margin:0 15px 11px;padding:16px 17px 17px;background:#f4f7fa;border:1px solid #d5dde5;border-radius:11px;text-decoration:none;transition:background .15s}.next-card:hover{background:white}.next-card-top{display:flex;align-items:center;justify-content:space-between;margin-bottom:11px;color:#8492a0}.next-index{font-size:10px;letter-spacing:1px}.next-card-top .icon{width:15px;height:15px}.next-card h3{font-size:13px;font-weight:500;line-height:1.6;overflow-wrap:anywhere}.next-project{display:block;font-size:10px;color:#818b96;margin-top:11px}.next-panel-footer{display:flex;align-items:center;gap:8px;padding:18px 24px 24px;font-size:11px;color:#7b8692}.next-panel-footer .icon{width:16px;height:16px}.next-list-empty{padding:0 24px 22px;color:#76818d;font-size:13px}.recent-section{margin-top:34px}.surface{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);padding:6px 23px;box-shadow:var(--shadow)}.activity-list{padding:0;margin:0;list-style:none}.activity-item{display:flex;gap:13px;padding:18px 0;position:relative}.activity-item+.activity-item{border-top:1px solid #e7ebf0}.activity-dot{width:27px;height:27px;background:#edf0f4;border-radius:50%;display:grid;place-items:center;color:#8b96a2;flex:0 0 auto;margin-top:2px}.activity-dot .icon{width:13px;height:13px}.activity-dot.is-complete{color:#55708d;background:#dfe8f1}.activity-body{min-width:0;flex:1}.activity-line{display:flex;gap:7px;align-items:baseline;flex-wrap:wrap;font-size:12px}.event-action{color:#848b93;font-size:11px}.event-title{color:#3e4751;font-weight:500;overflow-wrap:anywhere}.activity-meta{display:flex;align-items:center;gap:9px;flex-wrap:wrap;color:#8e969e;font-size:10px;margin-top:5px}.activity-meta>*+*:before{content:'·';margin-inline-end:9px;color:#bac1c9}.project-reference{color:#707c89}.event-note{font-size:12px;margin-top:9px;padding:8px 11px;background:#f2f5f8;border-inline-start:2px solid #cfd9e4;color:#737d87;white-space:pre-wrap;overflow-wrap:anywhere}.empty-state{padding:46px 25px;text-align:center;border:1px dashed #ced6df;border-radius:var(--radius);background:#fbfcfe8a}.empty-symbol{display:grid;place-items:center;width:53px;height:53px;border-radius:16px;background:#dfe7f0;color:#6c8198;margin:0 auto 20px}.empty-symbol .icon{width:28px;height:28px}.empty-state h3{font-size:19px}.empty-state p{color:var(--muted);font-size:13px;max-width:350px;margin:10px auto 21px}.empty-state .button{font-size:12px}.surface .empty-state{border:0;background:transparent;padding:28px 12px}.surface .empty-symbol{width:36px;height:36px;margin-bottom:13px}.surface .empty-symbol .icon{width:19px;height:19px}.surface .empty-state h3{font-size:15px}.surface .empty-state p{font-size:12px;margin-bottom:0}
+#app-footer{max-width:1192px;margin:0 auto;padding:24px 0 28px;border-top:1px solid var(--line);display:flex;justify-content:space-between;align-items:center;color:#949ca5;font-size:10px}.footer-brand{color:#758290}.loading{text-align:center;padding:90px;color:var(--muted)}.back-link{display:inline-flex;align-items:center;gap:7px;font-size:12px;color:#7c8691;text-decoration:none;margin-bottom:26px}.back-link:hover{color:var(--accent)}.back-link .icon{width:15px;height:15px}.project-hero{margin-bottom:36px}.project-hero h1{font-size:39px;overflow-wrap:anywhere}.project-eyebrow{display:flex;gap:15px;align-items:center;margin-bottom:13px}.project-eyebrow .eyebrow{margin:0}.project-layout{display:grid;grid-template-columns:minmax(0,1fr) 285px;gap:30px;align-items:start}.project-aside{display:grid;gap:20px}.next-action-box{background:var(--accent);color:#f3f6fa;padding:25px;border-radius:var(--radius);position:relative;overflow:hidden}.next-action-box:after{content:'';position:absolute;width:110px;height:110px;border:1px solid #ffffff0c;border-radius:50%;inset-inline-end:-55px;inset-block-end:-40px;pointer-events:none}.aside-label{display:flex;align-items:center;gap:8px;font-size:10px;letter-spacing:1px;text-transform:uppercase;color:#b3c1d0;margin-bottom:18px}.aside-label .icon{width:15px;height:15px}.next-action-text{font-size:19px;line-height:1.6;font-weight:400;white-space:pre-wrap;overflow-wrap:anywhere}.next-action-placeholder{font-size:17px;line-height:1.6;color:#c8d4e0}.next-edit{margin-top:23px;padding:6px 0;min-height:26px;background:none;color:#b4c3d4;font-size:11px;font-weight:400}.next-edit:hover{color:white}.next-edit .icon{width:13px;height:13px}.context-card{background:#e6eaef;border:1px solid #d9e0e7;border-radius:var(--radius);padding:24px}.context-card .eyebrow{font-size:9px;margin-bottom:13px}.context-card h3{font-size:14px}.context-description{font-size:12px;color:#747e89;margin-top:9px;line-height:1.8;white-space:pre-wrap;overflow-wrap:anywhere}.context-achievement{display:flex;align-items:center;gap:7px;border-top:1px solid #d1d9e1;margin-top:22px;padding-top:16px;font-size:11px;color:#6b7b8c}.context-achievement .icon{width:14px;height:14px}.goal-card{background:var(--white);border:1px solid var(--line);border-radius:var(--radius);margin-bottom:20px;overflow:hidden;box-shadow:var(--shadow)}.goal-summary{padding:22px 24px;display:flex;gap:15px;align-items:center;cursor:pointer;list-style:none}.goal-summary::-webkit-details-marker{display:none}.goal-number{align-self:flex-start;border:1px solid #dfe4ea;border-radius:8px;background:#f0f4f8;color:#8e99a5;font-size:11px;display:grid;place-items:center;width:32px;height:32px;flex-shrink:0}.goal-title{flex:1;min-width:0}.goal-title h3{font-size:17px;overflow-wrap:anywhere}.goal-meta{font-size:11px;color:#808a95;display:block;margin-top:5px}.chevron{color:#8f9aa5;transform:rotate(-90deg);font-size:20px}details[open]>.goal-summary .chevron{transform:rotate(0)}.goal-body{padding:0 24px 9px}.goal-description{font-size:12px;color:#7e8994;margin-bottom:15px;white-space:pre-wrap;overflow-wrap:anywhere}.steps-list{padding:0;margin:0;list-style:none;border-top:1px solid #e5eaf0}.step-row{display:flex;align-items:flex-start;gap:12px;padding:18px 0}.step-row+.step-row{border-top:1px solid #e5eaf0}.step-toggle{width:20px;height:20px;border-radius:6px;border:1px solid #c2ccd6;background:white;display:grid;place-items:center;color:#516d8a;flex:0 0 auto;margin-top:2px;padding:2px}.step-toggle:hover{background:#e4ecf4;border-color:#7c93ac}.step-toggle .icon{width:13px;height:13px}.is-done .step-toggle{background:#dee7f0;border-color:#b9c8d8}.step-content{min-width:0;flex:1}.step-title{font-size:13px;color:#3f4b57;display:block;overflow-wrap:anywhere}.is-done .step-title{color:#707d8a}.step-description{font-size:11px;color:#8b95a0;margin-top:5px;white-space:pre-wrap;overflow-wrap:anywhere}.completion-date{font-size:10px;display:block;color:#7e8fa1;margin-top:5px}.step-row .badge{font-size:9px;padding:3px 7px}.goal-footer{border-top:1px solid #e5eaf0;padding-top:9px}.goal-footer .button{font-size:12px}.empty-steps{font-size:12px;color:#8c97a2;padding-bottom:17px}.project-activity{margin-top:35px}
+dialog{border:1px solid #d8dfe6;border-radius:22px;box-shadow:0 25px 100px #1e283333;color:var(--ink);background:var(--white);width:min(540px,calc(100vw - 36px));max-height:calc(100dvh - 32px);padding:24px 30px;overscroll-behavior:contain}dialog::backdrop{background:#1a253055;backdrop-filter:blur(4px)}.modal-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:19px}.modal-icon{width:37px;height:37px;display:grid;place-items:center;border:1px solid #d1dbe5;background:#e5ecf3;border-radius:12px;color:#5e7287}.modal-close{align-self:flex-start}.modal-close .icon{width:18px;height:18px}dialog h2{font-size:25px;letter-spacing:-.6px}.modal-intro{font-size:13px;color:var(--muted);margin-top:8px;margin-bottom:24px;max-width:410px}.field{display:grid;gap:7px;margin-bottom:18px}.field-label{font-size:12px;color:#4e5c6c;font-weight:600;display:flex;gap:8px;align-items:baseline}.optional{font-size:10px;color:#8e99a5;font-weight:400}.input{width:100%;min-width:0;background:#fbfcfe;border:1px solid #d6dde4;border-radius:9px;padding:11px 13px;color:var(--ink);font-size:13px;line-height:1.6;resize:vertical}.input::placeholder{color:#9ba4ae}.input[aria-invalid=true]{border-color:#b78269}.field-error{font-size:11px;color:#a05c44}.field-error:empty{display:none}.field-hint{font-size:11px;color:#8c96a1}.form-context{border-top:1px solid #dfe4ea;margin-top:4px;padding-top:12px}.form-context>summary{font-size:12px;color:#6f7e8f;cursor:pointer}.context-fields{padding-top:17px}.form-actions{display:flex;justify-content:flex-end;gap:10px;border-top:1px solid #dfe4ea;padding-top:20px;margin-top:21px}.form-actions .button{font-size:12px}.form-error{border:1px solid #e8d6bd;background:#faf2e5;color:#92713b;border-radius:9px;font-size:12px;padding:13px 15px;margin-top:15px}.form-error .button{margin-top:9px;font-size:11px;padding:6px 10px}.completion-step-title{padding:13px 16px;background:#e8eef4;border:1px solid #d6dfe9;border-radius:10px;margin-bottom:20px;font-size:14px;overflow-wrap:anywhere}#toast{position:fixed;inset-block-end:24px;inset-inline-start:50%;transform:translateX(-50%);z-index:20;background:var(--accent);color:white;border:1px solid #526172;border-radius:10px;padding:11px 20px;font-size:13px;box-shadow:0 6px 25px #26323f22;max-width:85vw;text-align:center}
+[dir=rtl] h1,[dir=rtl] h2,[dir=rtl] h3,[dir=rtl] .brand-word{letter-spacing:0}[dir=rtl] .eyebrow{letter-spacing:.3px}[dir=rtl] .back-link .icon,[dir=rtl] .card-open .icon,[dir=rtl] .next-card-top .icon{transform:scaleX(-1)}[dir=rtl] #toast{transform:translateX(50%)}
+@media(min-width:1400px){#main{padding-top:53px}.workspace-hero{margin-bottom:36px}}
+@media(max-width:1100px){.header-inner{gap:38px;padding-inline:30px}#main{padding-inline:30px}.overview-grid,.project-layout{grid-template-columns:minmax(0,1fr) 260px;gap:22px}.project-card{padding-inline:18px}.project-counts{gap:9px}.stat{padding-inline:22px;gap:12px}.stats-row{padding-block:19px}#app-footer{margin-inline:30px}.project-row .badge{display:none}.next-panel-heading{padding-inline:20px}}
+@media(max-width:850px){.overview-grid,.project-layout{grid-template-columns:1fr}.next-panel{display:grid;grid-template-columns:1fr 1fr;gap:0}.next-panel-heading{grid-column:1/-1}.next-panel-heading p{max-width:none}.next-mark{display:none}.next-panel-footer{grid-column:1/-1}.project-aside{grid-template-columns:1fr 1fr}.stat-label{display:flex;flex-direction:column;gap:4px;align-items:flex-start}.stat-value{order:-1;font-size:25px}.stat-sub{display:none}.stats-row{margin-bottom:30px}.storage-status{display:none}.hero-subtitle{font-size:13px}h1{font-size:35px}.project-hero h1{font-size:33px}}
+@media(max-width:600px){.header-inner{padding-inline:20px;gap:22px;min-height:72px}.brand-word{font-size:15px}.brand-icon{width:29px;height:29px}.nav-link{font-size:12px}.header-end{gap:8px}#main{padding:30px 20px}.workspace-hero,.project-hero{align-items:flex-start;flex-direction:column;gap:20px}h1{font-size:33px}.stats-row{padding-block:17px}.stat{padding-inline:12px;gap:6px;flex-direction:column;align-items:flex-start}.stat-symbol{display:none}.stat-label{font-size:10px}.stat-value{font-size:26px}.projects-grid{grid-template-columns:1fr}.project-description{min-height:0}.next-panel,.project-aside{grid-template-columns:1fr}.next-card{margin-inline:18px}.section-heading h2{font-size:20px}.goal-summary{padding:19px}.goal-body{padding-inline:19px}.step-row .badge{display:none}.context-card{display:none}.project-layout{display:flex;flex-direction:column-reverse}.project-layout>div,.project-aside{width:100%}.next-action-box{padding:20px}.next-action-text{font-size:17px}.next-edit{margin-top:12px}.next-panel-heading{padding-bottom:17px}.activity-line{gap:4px}dialog{padding:24px}.preview-strip{font-size:10px}#app-footer{margin-inline:20px}}
+@media(prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+[lang=ar]{font-family:Arial,Tahoma,sans-serif}[lang=ar] .section-sub,[lang=ar] .hero-subtitle,[lang=ar] .project-description,[lang=ar] .next-panel-heading p,[lang=ar] .context-description,[lang=ar] .modal-intro{font-size:15px}[lang=ar] .nav-link,[lang=ar] .button,[lang=ar] .field-label,[lang=ar] .goal-meta,[lang=ar] .step-title,[lang=ar] .next-card h3{font-size:14px}[lang=ar] .eyebrow,[lang=ar] .storage-status,[lang=ar] .preview-strip,[lang=ar] .badge,[lang=ar] .project-counts,[lang=ar] .project-card-bottom,[lang=ar] .completion-date,[lang=ar] .activity-meta,[lang=ar] .event-action,[lang=ar] .field-hint,[lang=ar] .optional,[lang=ar] .next-project,[lang=ar] .aside-label,[lang=ar] .back-link{font-size:12px}[lang=ar] .stat-label,[lang=ar] .input{font-size:15px}[lang=ar] .event-title,[lang=ar] .event-note{font-size:14px}
+
+/* Calm blue direction selected during the first visual review. */
+:root{--paper:#f5f7fa;--white:#ffffff;--ink:#293e54;--muted:#718295;--accent:#426b95;--accent-dark:#34597e;--tint:#eaf1f8;--line:#dfe6ee}
+#app-header{background:#ffffffed}.brand-icon{background:#426b95}.next-panel{background:#edf3f9;border-color:#dce5ef}.next-panel-heading p{color:#72869b}.next-card{background:#fbfdff;border-color:#dce6f0}.next-card:hover{background:#fff}.next-action-box{background:#426b95}.next-action-box .aside-label,.next-edit{color:#d3e2f1}.next-action-box .next-action-text{color:#fff}.stats-row{background:#eef3f8;border-color:#e2e8f0}.stat-symbol{background:#f9fbfe}.context-card{background:#eef3f9}.project-card{background:#fff}.badge.active,.badge.completed{background:#eaf2fa;color:#577a9f}.badge.active:before{background:#6c92b7}.project-card .project-icon{background:#eaf1f9;color:#6886a8}.project-card.tone-1 .project-icon{background:#edf0f7;color:#7c86a9}.project-card.tone-2 .project-icon{background:#e8f2f6;color:#6c91a3}.preview-strip{background:#eef2f7;color:#6d8096;border-color:#dfe6ef}.storage-status.preview .status-dot{background:#7797b8}
+.context-disclosure{margin-top:10px}.context-disclosure>summary{display:flex;align-items:center;gap:7px;list-style:none;cursor:pointer;width:fit-content;color:#6687a8;font-size:11px;padding:3px 0}.context-disclosure>summary::-webkit-details-marker{display:none}.context-disclosure>summary .icon{height:14px;width:14px}.context-disclosure>summary:after{content:'+';margin-inline-start:5px;color:#8ba0b5;font-size:15px}.context-disclosure[open]>summary:after{content:'−'}.context-count{background:#edf3f9;color:#6d89a6;border-radius:4px;padding:0 5px;min-width:17px;text-align:center;font-size:10px}.context-log{margin-top:10px;background:#f5f8fc;border:1px solid #e3ebf4;border-radius:11px;padding:15px 17px}.context-log-label{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:#8297ae;margin-bottom:12px}.context-note{padding:12px 0;border-top:1px solid #e0e8f1}.context-note:first-of-type{border-top:0;padding-top:0}.context-note-head{display:flex;align-items:center;gap:9px;flex-wrap:wrap;margin-bottom:7px}.context-note-head time{font-size:10px;color:#8a9bb0}.context-note-body{font-size:12px;line-height:1.8;color:#566f89;white-space:pre-wrap;overflow-wrap:anywhere}.context-note-helper{display:block;font-size:10px;color:#8b9eb2;margin-top:6px}.context-log .button{font-size:11px;padding:5px 0;min-height:30px;margin-top:8px}.context-note-kind{font-size:9px;background:#e5eef8;color:#6183a7;padding:2px 7px;border-radius:4px}.context-note-kind.issue{background:#f7eddc;color:#a27e43}.context-note-kind.summary{background:#e9edf6;color:#7c85a9}.context-empty{font-size:12px;color:#8397ad;margin:0 0 10px}.goal-context{border-top:1px solid #e5ebf2;padding:12px 0 7px;margin-top:0}.goal-context>summary{font-size:12px}.goal-context .context-log{margin-bottom:8px}.goal-footer{display:flex;justify-content:space-between;align-items:center}.step-row .step-status{flex-shrink:0}.structure-hint{display:flex;align-items:center;gap:7px;font-size:12px;color:#8396aa;margin:0 0 18px}.structure-hint .icon{width:14px;height:14px}.note-target{font-size:12px;color:#7790ab;padding:10px 13px;border-radius:9px;background:#f0f5fb;margin-bottom:18px}.note-target strong{display:block;font-size:13px;color:#466783;margin-top:4px}.note-type-select{appearance:auto}.note-preview-hint{font-size:11px;line-height:1.65;color:#8b9db2;margin-top:6px}[lang=ar] .context-disclosure>summary,[lang=ar] .context-note-body,[lang=ar] .context-empty,[lang=ar] .structure-hint{font-size:14px}[lang=ar] .context-log-label,[lang=ar] .context-note-head time,[lang=ar] .context-note-kind,[lang=ar] .context-note-helper{font-size:12px;letter-spacing:0}
+.step-side{display:flex;align-items:center;gap:8px;flex-shrink:0}.step-menu{position:relative}.step-menu>summary{list-style:none;cursor:pointer;color:#8ca1b7;font-weight:700;letter-spacing:1px;border-radius:6px;padding:0 6px;font-size:18px;line-height:24px}.step-menu>summary::-webkit-details-marker{display:none}.step-menu>summary:hover{background:#edf3f9}.step-menu-popover{position:absolute;inset-inline-end:0;top:30px;background:#fff;border:1px solid #dfe7f0;border-radius:10px;padding:5px;box-shadow:0 7px 20px #293e5415;z-index:3}.step-menu-popover .button{font-size:11px;font-weight:400;color:#71869c}.goal-card{overflow:visible}.goal-body{border-radius:0 0 var(--radius) var(--radius)}.goal-summary{border-radius:var(--radius)}[lang=ar] .step-menu-popover .button{font-size:13px}
+</style>
+  <style>/* Visual reference: learner-provided screenshots of the local MySpace page.
+   Original styling for Work Tracker; no reference source code is reused. */
+:root {
+  --paper: #f5f7f9;
+  --white: #fff;
+  --ink: #27353e;
+  --muted: #66737b;
+  --accent: #3c7065;
+  --accent-dark: #2e5b51;
+  --tint: #edf4f2;
+  --line: #e4e8eb;
+  --radius: 14px;
+  --shadow: 0 3px 18px #20313c03;
+  --sidebar-width: 232px;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Arial, sans-serif;
+}
+body { font-size: 15px; }
+h1 { font-size: 32px; font-weight: 700; letter-spacing: -1.2px; }
+h2 { font-size: 19px; font-weight: 650; letter-spacing: -.6px; }
+h3 { font-weight: 650; }
+#workspace-sidebar { position: fixed; inset-block: 0; inset-inline-start: 0; width: var(--sidebar-width); background: #1c2d39; color: #d4dfe5; padding: 32px 22px 24px; display: flex; flex-direction: column; overflow-y: auto; z-index: 5; }
+.brand-link { gap: 11px; color: #fff; padding-inline: 10px; margin-bottom: 42px; }
+.brand-icon { width: 32px; height: 32px; border: 2px solid #99cbc1; color: #a5d5ca; border-radius: 50%; background: transparent; transform: none; }
+.brand-icon .icon { width: 18px; height: 18px; }
+.brand-word { font-size: 20px; font-weight: 700; letter-spacing: -.8px; white-space: nowrap; }
+.sidebar-label { font-size: 11px; text-transform: uppercase; letter-spacing: 1.5px; color: #b6c5ce; margin: 0 14px 13px; }
+.sidebar-nav, .sidebar-projects { display: flex; flex-direction: column; gap: 7px; }
+.sidebar-link { display: flex; align-items: center; gap: 13px; width: 100%; min-height: 45px; padding: 10px 14px; text-align: start; border: 0; border-radius: 9px; text-decoration: none; background: transparent; color: #d0dce3; font-size: 14px; line-height: 1.5; }
+.sidebar-link .icon { width: 18px; height: 18px; color: #bbd0d9; }
+.sidebar-link:hover, .sidebar-link.selected { background: #2c3d49; color: #fff; }
+.sidebar-link.selected .icon { color: #a4d4c8; }
+.sidebar-count { margin-inline-start: auto; background: #344651; color: #cfdae0; border-radius: 4px; padding: 0 6px; font-size: 11px; }
+.projects-label { margin-top: 44px; }
+.sidebar-projects { gap: 4px; }
+.project-shortcut { font-size: 13px; gap: 12px; }
+.sidebar-project-name { overflow-wrap: anywhere; }
+.project-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; background: #7799d5; }
+.tone-1 .project-dot { background: #a286bd; }
+.tone-2 .project-dot { background: #c6ac6b; }
+.sidebar-storage { margin: auto 12px 0; padding-top: 25px; border-top: 1px solid #354651; display: flex; gap: 10px; font-size: 12px; color: #b4c4ce; }
+.sidebar-projects { margin-bottom: 48px; }
+.sidebar-storage .icon { width: 16px; height: 16px; margin-top: 3px; }
+.sidebar-storage strong { font-size: 12px; font-weight: 600; color: #e2eaf0; }
+.sidebar-storage p { margin-top: 3px; line-height: 1.6; }
+#app-header, #preview-notice, #main, #app-footer { margin-inline-start: var(--sidebar-width); }
+#app-header { background: #fff; border-color: var(--line); }
+.header-inner { max-width: none; min-height: 82px; padding: 0 42px; gap: 24px; }
+.breadcrumb { display: flex; align-items: center; gap: 13px; min-width: 0; font-size: 13px; color: #637078; }
+.breadcrumb a { text-decoration: none; white-space: nowrap; }
+.breadcrumb-current { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.breadcrumb-divider { color: #9ba4aa; }
+.language-button { display: flex; align-items: center; gap: 8px; padding: 8px 12px; background: #fff; border-color: var(--line); font-size: 12px; white-space: nowrap; }
+.language-button .icon { width: 17px; height: 17px; }
+.preview-strip { background: #fff7e8; color: #796039; border-color: #eee2c9; padding: 8px 28px; display: flex; justify-content: center; gap: 10px; font-size: 12px; letter-spacing: 0; }
+.preview-strip strong { font-weight: 650; }
+#main { max-width: none; margin-inline-end: 0; padding: 36px 48px 48px; }
+.workspace-hero { margin-bottom: 30px; gap: 24px; }
+.workspace-date { font-size: 13px; color: #68737b; margin-bottom: 10px; }
+.primary { background: #1c2d39; border-color: #1c2d39; }
+.primary:hover { background: #2e4352; }
+.button { border-radius: 9px; font-size: 13px; }
+.stats-row { padding: 0; background: none; border: 0; border-radius: 0; gap: 18px; margin-bottom: 32px; }
+.stat, .stat+.stat { min-width: 0; background: #fff; border: 1px solid var(--line); border-radius: var(--radius); padding: 21px 22px; gap: 17px; box-shadow: var(--shadow); }
+.stat-symbol { background: #eff1fc; color: #7287c2; border: 0; border-radius: 12px; }
+.stat:nth-child(2) .stat-symbol { background: #edf5f2; color: #5f9084; }
+.stat:nth-child(3) .stat-symbol { background: #fbf5e9; color: #ac955d; }
+.stat-label { display: flex; flex-direction: column; align-items: flex-start; gap: 3px; font-size: 12px; width: auto; color: #657078; }
+.stat-value { order: -1; font-size: 29px; line-height: 1.1; font-weight: 650; letter-spacing: -.6px; }
+.stat-sub { font-size: 10px; color: #7e898e; }
+.overview-grid { grid-template-columns: minmax(0, 1fr) 310px; gap: 26px; }
+.section-heading { margin-bottom: 18px; }
+.section-sub { color: #738087; }
+.projects-grid { gap: 18px; }
+.project-card { padding: 22px 21px 0; border-color: var(--line); background: #fff; }
+.project-card-top { margin-bottom: 17px; }
+.project-card .project-icon { width: 44px; height: 44px; border-radius: 11px; color: #7788b8; background: #f0f0fa; }
+.project-card.tone-1 .project-icon { color: #a180ad; background: #f6eff8; }
+.project-card.tone-2 .project-icon { color: #af965a; background: #faf5ea; }
+.project-title-link h3 { font-size: 16px; color: var(--ink); }
+.project-description { font-size: 13px; color: #68757c; margin-top: 7px; }
+.project-counts { font-size: 11px; color: #77838b; margin-block: 17px 16px; }
+.project-card-bottom { min-height: 57px; border-color: #eef0f2; font-size: 10px; color: #748088; }
+.card-open { color: var(--accent); padding: 6px 0; font-size: 12px; font-weight: 600; flex-direction: row-reverse; }
+.card-open .icon { width: 14px; height: 14px; }
+.badge.active, .badge.completed { color: #517b6f; background: #edf5f1; }
+.badge.active:before { background: #6a9b8b; }
+.badge.neutral { color: #7a878d; }
+.next-panel { background: #fff; border-color: var(--line); box-shadow: var(--shadow); }
+.next-panel-heading { padding: 23px 23px 17px; }
+.next-mark { display: none; }
+.next-panel h2 { font-size: 19px; }
+.next-panel-heading p { color: #718087; max-width: none; }
+.next-card { margin: 0 22px; padding: 17px 0; background: transparent; border: 0; border-top: 1px solid #edf0f1; border-radius: 0; }
+.next-card:hover { background: #f7faf9; }
+.next-card h3 { font-size: 14px; color: #384a50; }
+.next-card-top { color: #8a9a9b; margin-bottom: 7px; }
+.next-project { font-size: 11px; color: #75868a; margin-top: 7px; }
+.next-panel-footer { padding: 16px 23px 22px; color: #719086; font-size: 11px; }
+.recent-section { margin-top: 30px; }
+.surface { border-color: var(--line); }
+.activity-dot.is-complete { background: #eaf3ef; color: #568574; }
+.event-note { background: #f5f8f7; border-color: #d2e2dc; color: #657972; }
+.event-action { color: #77858b; }
+.event-title { color: #3b4b52; }
+.empty-state { background: #fff; border: 1px solid var(--line); }
+.empty-symbol { border-radius: 50%; background: #f0f4f5; color: #93a3ad; }
+.empty-state h3 { font-size: 16px; }
+#app-footer { max-width: none; margin-inline-end: 48px; padding-inline-start: 48px; font-size: 11px; }
+.back-link { margin-bottom: 20px; color: #6d7b82; }
+.project-hero { margin-bottom: 28px; }
+.project-hero h1 { font-size: 32px; }
+.project-eyebrow { margin-bottom: 9px; }
+.eyebrow { color: #75858d; font-weight: 500; }
+.hero-subtitle { font-size: 14px; color: #738087; margin-top: 9px; }
+.project-layout { display: flex; flex-direction: column; gap: 26px; }
+.project-goals { order: 1; width: 100%; }
+.project-aside { order: 2; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.project-activity { order: 3; width: 100%; margin-top: 0; }
+.project-goals>.section-heading { padding-bottom: 15px; border-bottom: 1px solid var(--line); }
+.project-goals>.section-heading h2 { font-size: 16px; color: var(--accent); }
+.goal-card { margin-bottom: 18px; }
+.goal-card:last-child { margin-bottom: 0; }
+.goal-title h3 { font-size: 17px; }
+.goal-number { color: #6a8c80; background: #eff5f2; border-color: #e3ebe7; }
+.goal-meta, .goal-description { color: #77878c; }
+.step-row { padding: 20px 0; }
+.step-title { font-size: 14px; color: #34484f; }
+.step-description { font-size: 12px; color: #78898d; }
+.completion-date { font-size: 11px; color: #728b80; }
+.is-done .step-toggle { background: #e4f0e9; border-color: #c5dbce; color: #50806d; }
+.next-action-box, .context-card { border: 1px solid var(--line); padding: 25px; background: #fff; color: var(--ink); }
+.next-action-box:after { display: none; }
+.aside-label, .next-action-box .aside-label { color: var(--ink); text-transform: none; letter-spacing: -.3px; font-size: 18px; font-weight: 650; margin-bottom: 12px; }
+.next-action-box .next-action-text { color: #546b64; font-size: 17px; }
+.next-action-placeholder { color: #7e8d88; font-size: 15px; }
+.next-edit { color: var(--accent); font-size: 12px; margin-top: 18px; }
+.next-edit:hover { color: var(--accent-dark); }
+.context-description { color: #738087; font-size: 13px; }
+.context-achievement { color: #648374; border-color: var(--line); }
+.context-disclosure>summary { color: #5e8174; font-size: 12px; }
+.context-log { background: #f7f9f8; border-color: #e3ebe7; }
+.context-count { background: #eaf1ee; color: #668677; }
+.context-note-body { color: #536c61; font-size: 13px; }
+.context-note-kind { background: #e7f1eb; color: #5d806c; }
+.context-log-label, .context-note-helper, .context-note-head time { color: #7b8f84; }
+.structure-hint { color: #768b81; }
+.modal-icon { color: #5e8274; background: #edf5f1; border-color: #dce8e1; }
+.input { background: #fff; border-color: #dce3e5; }
+.note-target, .completion-step-title { background: #f0f6f3; border-color: #dce8e1; color: #6b8679; }
+.note-target strong { color: #47715e; }
+dialog { border-radius: 15px; }
+[lang=ar] .sidebar-label { letter-spacing: 0; }
+[lang=ar] .sidebar-link { font-size: 15px; }
+@media(max-width:1200px) {
+  :root { --sidebar-width: 210px; }
+  #workspace-sidebar { padding-inline: 16px; }
+  .brand-word { font-size: 18px; }
+  #main { padding-inline: 30px; }
+  .header-inner { padding-inline: 30px; }
+  .overview-grid { grid-template-columns: minmax(0,1fr) 270px; gap: 20px; }
+  .project-card-bottom { align-items: flex-start; flex-direction: column; padding-block: 10px; gap: 3px; }
+  .stat, .stat+.stat { padding: 18px 16px; gap: 12px; }
+}
+@media(max-width:1000px) {
+  .overview-grid { grid-template-columns: 1fr; }
+  .next-panel { display: block; }
+  .project-aside { grid-template-columns: 1fr; }
+  .stat-symbol { width: 34px; height: 34px; }
+  .stat-label { font-size: 11px; }
+  .stats-row { gap: 10px; }
+  .project-card-bottom { align-items: center; flex-direction: row; }
+}
+@media(max-width:700px) {
+  :root { --sidebar-width: 170px; }
+  #workspace-sidebar { padding-inline: 10px; }
+  .brand-link { padding-inline: 2px; gap: 7px; }
+  .brand-word { font-size: 16px; }
+  .brand-icon { width: 26px; height: 26px; }
+  .sidebar-link { font-size: 12px; padding-inline: 8px; gap: 7px; }
+  .sidebar-label { margin-inline: 8px; }
+  .sidebar-storage { margin-inline: 5px; }
+  #main { padding: 24px 18px; }
+  .header-inner { padding-inline: 18px; }
+  .breadcrumb a, .breadcrumb-divider { display: none; }
+  .preview-strip { flex-direction: column; gap: 0; font-size: 11px; padding: 6px 12px; }
+  .stats-row { grid-template-columns: 1fr; }
+  .stat { flex-direction: row; }
+  .stat-symbol { display: grid; }
+  .projects-grid { grid-template-columns: 1fr; }
+  .project-layout { flex-direction: column; }
+  .context-card { display: block; }
+  .step-row .badge { display: inline-flex; }
+  .step-side { flex-direction: column; gap: 3px; }
+  h1, .project-hero h1 { font-size: 28px; }
+}
+
+.modal-preview-note { margin: -8px 0 20px; padding: 10px 12px; border-radius: 8px; background: #fff7e8; color: #796039; font-size: 12px; }
+.stat, .stat+.stat { padding-block: 16px; }
+.stat-label { line-height: 1.4; gap: 2px; }
+html[lang=ar] { font-family: Arial, Tahoma, sans-serif; }
+[lang=ar] .sidebar-label, [lang=ar] .sidebar-storage, [lang=ar] .preview-strip { font-size: 13px; }
+
+/* A completed step remains open for notes without changing its achievement. */
+.step-title-button { border: 0; background: transparent; padding: 0; text-align: start; font-family: inherit; line-height: inherit; cursor: pointer; }
+.step-title-button:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* Focused controls for project identity and current-plan progress. */
+.project-icon-button { border: 1px solid transparent; padding: 10px; display: inline-grid; place-items: center; cursor: pointer; flex: 0 0 auto; background: #f0f0fa; color: #7788b8; border-radius: 11px; }
+.project-icon-button:hover { border-color: #b8c9c2; background: #edf5f1; }
+.project-icon-button .icon { width: 23px; height: 23px; }
+.project-icon-button>span:empty { display: none; }
+.project-shortcut>.icon { width: 16px; height: 16px; flex: 0 0 auto; color: #9cb5d8; }
+.project-shortcut.tone-1>.icon { color: #baa7d0; }
+.project-shortcut.tone-2>.icon { color: #d7c18c; }
+.project-eyebrow { align-items: center; }
+.icon-picker { margin: 0 0 18px; padding: 0; border: 0; min-width: 0; }
+.icon-picker legend { margin-bottom: 10px; }
+.icon-choices { display: grid; grid-template-columns: repeat(4,minmax(0,1fr)); gap: 9px; }
+.icon-choice { position: relative; cursor: pointer; }
+.icon-choice input { position: absolute; opacity: 0; width: 1px; height: 1px; }
+.icon-choice-face { display: flex; flex-direction: column; align-items: center; gap: 7px; padding: 12px 5px; border: 1px solid var(--line); border-radius: 10px; color: #75829d; background: #fafbfc; font-size: 11px; }
+.icon-choice-face .icon { width: 23px; height: 23px; }
+.icon-choice input:checked+.icon-choice-face { border-color: #638d7e; background: #edf5f1; color: #386b59; box-shadow: inset 0 0 0 1px #638d7e; }
+.icon-choice input:focus-visible+.icon-choice-face { outline: 3px solid #9aafbf; outline-offset: 3px; }
+.stat-button { font: inherit; color: inherit; text-align: start; cursor: pointer; width: 100%; }
+.stat-button:hover { border-color: #9fbfb3; background: #fbfdfc; }
+.goals-dialog { width: min(700px,calc(100vw - 36px)); }
+.goals-dialog-head { display: flex; align-items: center; justify-content: space-between; gap: 16px; margin-bottom: 12px; }
+.goal-totals { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 18px; }
+.goals-overview-list { display: grid; gap: 12px; }
+.goal-progress-card { display: flex; gap: 18px; align-items: center; padding: 18px; border: 1px solid var(--line); border-radius: 12px; }
+.goal-ring { flex: 0 0 66px; width: 66px; height: 66px; }
+.ring-track { stroke: #e8eeeb; }
+.ring-fill { stroke: #679d87; }
+.goal-ring text { font-size: 12px; font-weight: 600; fill: #4c6d5f; direction: ltr; }
+.goal-progress-body { min-width: 0; }
+.goal-progress-link { font: inherit; font-weight: 600; color: var(--ink); background: none; border: 0; padding: 0; text-align: start; cursor: pointer; overflow-wrap: anywhere; }
+.goal-progress-link:hover { text-decoration: underline; }
+.goal-project-name { color: var(--muted); font-size: 12px; margin-top: 5px; overflow-wrap: anywhere; }
+.goal-progress-meta { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; margin-top: 9px; font-size: 12px; color: #6b7e76; }
+.goal-ready-hint { color: #658474; font-size: 12px; margin-top: 7px; }
+.removed-steps { margin: 8px 0 18px; border: 1px dashed #c9d3ce; border-radius: 10px; padding: 13px; }
+.removed-steps>summary { color: #718078; font-size: 13px; cursor: pointer; }
+.removed-steps>.section-sub { margin: 10px 0; }
+.removed-steps .step-side { flex-direction: column; align-items: flex-end; }
+.removed-steps .step-side .button { font-size: 11px; white-space: normal; }
+@media(max-width:600px) { .icon-choices { grid-template-columns: repeat(4,minmax(0,1fr)); } .goal-progress-card { padding: 12px; gap: 12px; } .goal-ring { flex-basis: 54px; width: 54px; height: 54px; } }
+
+.goal-totals .badge { font-size: 12px; padding: 5px 8px; background: #f4f7f6; color: #526b61; }
+[lang=ar] .goal-totals .badge, [lang=ar] .goal-progress-meta, [lang=ar] .goal-ready-hint { font-size: 13px; }
+
+/* Keep step actions readable in both directions. */
+.step-menu-popover { min-width: 210px; display: grid; gap: 4px; }
+.step-menu-popover .button { justify-content: flex-start; text-align: start; }
+.goal-footer { flex-wrap: wrap; gap: 8px; }
+</style>
+
+<link rel="icon" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3Qgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0IiByeD0iMTYiIGZpbGw9IiMxYzJkMzkiLz48Y2lyY2xlIGN4PSIzMiIgY3k9IjMyIiByPSIyMiIgZmlsbD0ibm9uZSIgc3Ryb2tlPSIjYTVkNWNhIiBzdHJva2Utd2lkdGg9IjIuNSIvPjxwYXRoIGQ9Im0yMiAzMiA3IDcgMTQtMTYiIGZpbGw9Im5vbmUiIHN0cm9rZT0iI2E1ZDVjYSIgc3Ryb2tlLXdpZHRoPSIzIiBzdHJva2UtbGluZWNhcD0icm91bmQiIHN0cm9rZS1saW5lam9pbj0icm91bmQiLz48L3N2Zz4K"><style>.review-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:14px}.review-stats .stat{padding:18px 16px;align-items:center}.review-stats .stat-label{font-size:11px}.review-stats .stat-value{font-size:28px}.review-stats .stat:nth-child(4) .stat-symbol{background:#eef3fa;color:#6689b0}.review-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:26px}.review-layout .projects-grid{gap:16px}.review-layout .project-card{padding:22px}.review-layout .project-description{display:none}.review-layout .project-counts{margin-block:10px}.review-panel{background:#fff;border:1px solid var(--line);border-radius:14px;padding:23px;margin-top:25px}.review-aside .review-panel:first-child{margin-top:0}.review-panel .section-heading{margin-bottom:20px}.review-panel .goal-progress-card{border:0;border-top:1px solid var(--line);border-radius:0;padding:18px 0}.review-panel .goal-progress-card:first-child{border-top:0;padding-top:0}.review-panel .goal-progress-card:last-child{padding-bottom:0}.review-goals{display:grid;gap:12px}.review-panel .review-goals{gap:0}.deadline-item{display:flex;align-items:center;gap:10px;padding:16px 0;border-top:1px solid var(--line)}.deadline-item .icon{width:18px;color:#a88c53;flex-shrink:0}.deadline-item strong,.today-item strong,.review-next strong{font-size:13px;font-weight:600}.deadline-item .badge{margin-inline-start:auto;font-size:10px;white-space:nowrap}.badge.overdue{background:#fcf0e7;color:#9c633b}.today-item{border-top:1px solid var(--line);padding:17px 0}.today-item>.icon{width:16px;height:16px;color:#598679;margin-inline-end:9px}.today-item .section-sub{margin:7px 0}.review-footnote{font-size:12px;line-height:1.7;color:#6f7b83;margin-top:22px}.review-next{display:block;padding:15px 0;border-top:1px solid var(--line);text-decoration:none}.review-intro{margin-bottom:28px;color:#6a777e}.review-tabs{display:flex;gap:10px;margin-bottom:25px}.review-tabs [aria-pressed=true]{background:#eaf3ef;border-color:#98b7ab;color:#3d6c5d}.header-mark{display:grid;place-items:center;width:33px;height:33px;border:1.5px solid #95b9ae;border-radius:50%;color:#558678}.header-end{display:flex;align-items:center;gap:18px}.backup-link{margin-top:auto;margin-bottom:22px}.sidebar-storage{margin-top:0}.sidebar-projects{margin-bottom:32px}.review-panel .activity-list{padding:0}.review-panel .activity-item{padding:12px 0}.review-panel .activity-line{flex-wrap:wrap}.brand-icon .icon{width:19px;height:19px}.stat-symbol .icon{width:21px;height:21px}.preview-strip{font-size:11px;padding:6px 12px}
+
+/* Match the observed reference widths; navigation moves above only at 700px. */
+:root { --sidebar-width: 232px; }
+@media(max-width:1150px){
+ :root { --sidebar-width:205px; }
+ .review-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .review-layout{grid-template-columns:minmax(0,1fr) 260px}
+}
+@media(max-width:950px){
+ :root { --sidebar-width:195px; }
+ .review-layout{grid-template-columns:1fr}
+ .review-aside{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px;margin-top:24px}
+ .review-aside .review-panel{margin:0}
+ .review-aside .review-panel:last-child{grid-column:1/-1}
+ .review-layout .project-card{padding:18px}
+ .project-card-bottom{flex-wrap:wrap}
+}
+@media(max-width:700px){
+ #workspace-sidebar{position:relative;inset:auto;width:100%;padding:18px 20px 12px;display:block;overflow:visible}
+ .brand-link{margin:0 0 16px;padding:0;gap:10px}
+ .brand-word{font-size:20px}
+ .brand-icon{width:30px;height:30px}
+ .sidebar-nav{display:flex;flex-direction:row;justify-content:flex-start;gap:12px;flex-wrap:wrap}
+ .sidebar-link{width:auto;min-height:38px;padding:8px 10px;font-size:13px;gap:8px}
+ .sidebar-label,.sidebar-projects,.sidebar-storage{display:none}
+ .backup-link{display:flex;margin:10px 0 0;padding:0;min-height:26px;font-size:12px;justify-content:flex-end}
+ .backup-link .icon{width:15px;height:15px}
+ #app-header,#preview-notice,#main,#app-footer{margin-inline-start:0}
+ .header-inner{min-height:60px;padding-inline:20px}
+ .header-end{gap:12px}
+ .review-stats{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .review-stats .stat{gap:10px;padding:15px 12px}
+ .review-stats .stat-symbol{width:30px;height:30px}
+ .projects-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .review-layout .project-card{padding:16px}
+ .preview-strip{flex-direction:row;flex-wrap:wrap}
+ .review-tabs{flex-wrap:wrap}
+}
+@media(max-width:460px){
+ .projects-grid,.review-aside{grid-template-columns:1fr}
+ .review-stats .stat-label{font-size:11px}
+ .review-stats .stat{padding:12px 9px;gap:7px}
+ .review-stats .stat-value{font-size:25px}
+ #main{padding:24px 20px}
+ .workspace-hero{gap:10px}
+}
+</style></head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <aside id="workspace-sidebar"></aside>
+  <header id="app-header"></header>
+  <div id="preview-notice" hidden></div>
+  <main id="main" tabindex="-1"><div class="loading">Opening your workspace…</div></main>
+  <footer id="app-footer"></footer>
+  <div id="toast" role="status" aria-live="polite" hidden></div>
+  <dialog id="editor" aria-labelledby="editor-title"></dialog>
+<script type="module">window.WORK_TRACKER_PREVIEW={"revision": 12, "settings": {"language": "en"}, "demo_mode": true, "projects": [{"id": "demo-studio", "title": "Studio journal", "description": "A small monthly journal for ideas, experiments, and things worth sharing.", "next_action": "Outline the opening story", "status": "active", "position": 0, "created_at": "2026-10-25T09:00:00Z", "updated_at": "2026-10-25T09:00:00Z", "icon": "chart"}, {"id": "demo-home", "title": "Home refresh", "description": "Make the everyday spaces a little more useful, one corner at a time.", "next_action": "Compare the two desk layouts", "status": "active", "position": 1, "created_at": "2026-10-25T09:00:00Z", "updated_at": "2026-10-25T09:00:00Z", "icon": "spark"}, {"id": "demo-learning", "title": "Learning notes", "description": "Turn things I learn into small experiments I can actually try.", "next_action": "Choose one idea to put into practice", "status": "active", "position": 2, "created_at": "2026-10-25T09:00:00Z", "updated_at": "2026-10-25T09:00:00Z", "icon": "book"}], "goals": [{"id": "goal-journal", "project_id": "demo-studio", "title": "Put together the first issue", "description": "A useful first edition, with room to evolve.", "status": "active", "position": 0, "created_at": "2026-10-25T09:00:00Z", "updated_at": "2026-10-25T09:00:00Z"}, {"id": "goal-routine", "project_id": "demo-studio", "title": "Find a simple publishing rhythm", "description": "", "status": "active", "position": 1, "created_at": "2026-10-25T09:00:00Z", "updated_at": "2026-10-25T09:00:00Z"}, {"id": "goal-home", "project_id": "demo-home", "title": "Create a comfortable work corner", "description": "", "status": "active", "position": 0, "created_at": "2026-10-25T09:00:00Z", "updated_at": "2026-10-25T09:00:00Z"}, {"id": "goal-learn", "project_id": "demo-learning", "title": "Try something new this month", "description": "", "status": "active", "position": 0, "created_at": "2026-10-25T09:00:00Z", "updated_at": "2026-10-25T09:00:00Z"}, {"id": "review-done", "project_id": "demo-learning", "title": "Choose a learning direction", "description": "", "status": "completed", "position": 1, "created_at": "2026-10-25T09:00:00Z", "updated_at": "2026-10-25T09:00:00Z"}], "steps": [{"id": "step-topics", "goal_id": "goal-journal", "title": "Choose three topics for the first issue", "description": "Start with ideas already in my notebook.", "status": "completed", "completed_at": "2026-10-25T08:30:00Z", "position": 0, "created_at": "2026-10-25T09:00:00Z", "updated_at": "2026-10-25T09:00:00Z"}, {"id": "step-outline", "goal_id": "goal-journal", "title": "Outline the opening story", "description": "", "status": "pending", "completed_at": null, "position": 1, "created_at": "2026-10-25T09:00:00Z", "updated_at": "2026-10-25T09:00:00Z"}, {"id": "step-photos", "goal_id": "goal-journal", "title": "Gather a few supporting images", "description": "Added after working through the first outline.", "status": "pending", "completed_at": null, "position": 2, "created_at": "2026-10-25T09:00:00Z", "updated_at": "2026-10-25T09:00:00Z"}, {"id": "step-rhythm", "goal_id": "goal-routine", "title": "Set aside time for a monthly review", "description": "", "status": "pending", "completed_at": null, "position": 0, "created_at": "2026-10-25T09:00:00Z", "updated_at": "2026-10-25T09:00:00Z"}, {"id": "step-measure", "goal_id": "goal-home", "title": "Measure the available space", "description": "", "status": "completed", "completed_at": "2026-10-24T12:10:00Z", "position": 0, "created_at": "2026-10-25T09:00:00Z", "updated_at": "2026-10-25T09:00:00Z"}, {"id": "step-compare", "goal_id": "goal-home", "title": "Compare the two desk layouts", "description": "", "status": "pending", "completed_at": null, "position": 1, "created_at": "2026-10-25T09:00:00Z", "updated_at": "2026-10-25T09:00:00Z"}, {"id": "step-collect", "goal_id": "goal-learn", "title": "Collect a shortlist of ideas", "description": "", "status": "completed", "completed_at": "2026-10-23T14:40:00Z", "position": 0, "created_at": "2026-10-25T09:00:00Z", "updated_at": "2026-10-25T09:00:00Z"}, {"id": "review-done-step", "goal_id": "review-done", "title": "Pick the first experiment", "status": "completed", "completed_at": "2026-10-25T09:00:00Z", "position": 0}], "entries": [{"id": "event-step-topics", "project_id": "demo-studio", "goal_id": "goal-journal", "step_id": "step-topics", "kind": "event", "action": "step_completed", "text": "", "agent_name": "", "occurred_at": "2026-10-25T08:30:00Z", "recorded_at": "2026-10-25T08:30:00Z", "details": {"entity_type": "step", "entity_id": "step-topics", "title": "Choose three topics for the first issue"}}, {"id": "event-step-photos", "project_id": "demo-studio", "goal_id": "goal-journal", "step_id": "step-photos", "kind": "event", "action": "step_created", "text": "The outline needs a little more visual context.", "agent_name": "", "occurred_at": "2026-10-25T09:00:00Z", "recorded_at": "2026-10-25T09:00:00Z", "details": {"entity_type": "step", "entity_id": "step-photos", "title": "Gather a few supporting images"}}, {"id": "event-step-measure", "project_id": "demo-home", "goal_id": "goal-home", "step_id": "step-measure", "kind": "event", "action": "step_completed", "text": "", "agent_name": "", "occurred_at": "2026-10-24T12:10:00Z", "recorded_at": "2026-10-24T12:10:00Z", "details": {"entity_type": "step", "entity_id": "step-measure", "title": "Measure the available space"}}, {"id": "event-step-collect", "project_id": "demo-learning", "goal_id": "goal-learn", "step_id": "step-collect", "kind": "event", "action": "step_completed", "text": "", "agent_name": "", "occurred_at": "2026-10-23T14:40:00Z", "recorded_at": "2026-10-23T14:40:00Z", "details": {"entity_type": "step", "entity_id": "step-collect", "title": "Collect a shortlist of ideas"}}, {"id": "note-goal-1", "project_id": "demo-studio", "goal_id": "goal-journal", "step_id": null, "kind": "summary", "action": null, "text": "The first issue can be smaller than originally planned. Keep three useful topics and move the extra ideas to a later issue.", "agent_name": null, "occurred_at": "2026-10-25T08:00:00Z", "recorded_at": "2026-10-25T08:00:00Z", "details": {}}, {"id": "note-step-1", "project_id": "demo-studio", "goal_id": "goal-journal", "step_id": "step-outline", "kind": "issue", "action": null, "text": "The opening felt too long. It was trying to cover two different ideas at once.", "agent_name": "Claude", "occurred_at": "2026-10-25T08:15:00Z", "recorded_at": "2026-10-25T08:15:00Z", "details": {}}, {"id": "note-step-2", "project_id": "demo-studio", "goal_id": "goal-journal", "step_id": "step-outline", "kind": "note", "action": null, "text": "Focus the opening on one idea. Keep the second idea for the next issue.", "agent_name": null, "occurred_at": "2026-10-25T08:40:00Z", "recorded_at": "2026-10-25T08:40:00Z", "details": {}}, {"id": "review-event-step", "project_id": "demo-learning", "goal_id": "review-done", "step_id": "review-done-step", "kind": "event", "action": "step_completed", "text": "", "occurred_at": "2026-10-25T09:00:00Z", "recorded_at": "2026-10-25T09:00:00Z", "details": {"entity_type": "step", "entity_id": "review-done-step", "title": "Pick the first experiment"}}, {"id": "review-event-goal", "project_id": "demo-learning", "goal_id": "review-done", "step_id": null, "kind": "event", "action": "goal_completed", "text": "", "occurred_at": "2026-10-25T09:00:00Z", "recorded_at": "2026-10-25T09:00:00Z", "details": {"entity_type": "goal", "entity_id": "review-done", "title": "Choose a learning direction"}}]};
+let language = 'en';
+const messages = {
+ en: {
+  editGoalName:'Edit goal name', editStepName:'Edit step name', renameHint:'Change the name while keeping notes, progress, and earlier history.', changeReason:'Why change it?', moveStep:'Move to another goal', moveHint:'Move within this project. Notes, status, and the original achievement date stay with the step.', currentGoal:'Current goal: {title}', destinationGoal:'Move to goal', chooseGoal:'Choose another goal', noMoveGoals:'Add another goal to this project first, then move this step here.', goalRenamed:'Goal renamed', stepRenamed:'Step renamed', stepMoved:'Step moved', renamedFromTo:'Name: {before} → {after}', movedFromTo:'From {before} → {after}',
+  removed:'Removed', removedOn:'Removed {date}', removedHint:'These steps are outside the current plan. Their notes and achievements stay saved.', restoreTitle:'Bring this step back?', restoreHint:'Restore it to the same goal with its original status, notes, and achievement date.', stepRemoved:'Step removed from plan', stepRestored:'Step restored to plan',
+  projectIcon:'Project icon', changeIcon:'Change project icon', iconHint:'Choose an icon that helps you recognize this project. You can change it any time.', iconUpdated:'Project icon changed', icon_folder:'Folder', icon_chart:'Chart', icon_spark:'Spark', icon_award:'Award', icon_document:'Document', icon_book:'Book', icon_code:'Code', icon_heart:'Heart',
+  viewAllGoals:'View all goals', allGoals:'Your goals', totalGoals:'Total goals', completedGoals:'Completed goals', pausedGoals:'Paused-project goals', goalsOverviewHint:'Each circle shows completed steps in the current plan. Goal completion stays your decision.', stepsRemaining:'{n} steps remaining', noStepsPlanned:'No steps planned yet', stepsReady:'All current steps are done. This goal is still active.',
+
+  workspace:'Workspace', navigation:'Navigation', historyNav:'Progress history', previewShort:'Design preview', previewSidebar:'Fictional examples. Changes are not saved.', localSidebar:'Your projects and history, kept on this laptop.', demoHint:'Practice workspace with fictional data.',
+  stepOptions:'Step options', removeStep:'Remove from plan', removeTitle:'Take this step out of the plan?', removeHint:'Its notes, history, and previous achievements stay saved. You can bring it back later.', removeReason:'Why remove it?', removedSteps:'Removed steps', restoreStep:'Restore to plan',
+  notesUpdates:'Notes & updates', addNote:'Add a note', noteKind:'Note', issueKind:'Issue', summaryKind:'Summary', noteType:'Type', noteBody:'What happened?', noteHint:'What did you try, discover, or run into? Keep the context here.', noteDate:'When did it happen?', noteGoal:'About this goal', noteStep:'About this step', noteEmpty:'Keep what happened here, alongside the work it belongs to.', newNote:'Keep the context.', newNoteHint:'A dated note for this part of the work. It stays separate from completion.', structureHint:'Add as many goals as you need. Each goal has its own steps.', notePreviewHint:'Layout preview only. Notes cannot be saved here yet.', requiredNote:'Write a note first.',
+
+  brand:'Work Tracker', tagline:'A place to pick up where you left off.', overview:'Overview', projects:'Projects', local:'Saved on this laptop', preview:'Visual preview · fictional data', previewNote:'Explore the layout. Saving is unavailable in this preview.', skip:'Skip to content',
+  eyebrow:'YOUR WORKSPACE', heading:'Room for all your work.', intro:'See where things stand. Take the next small step.', addProject:'New project', addGoal:'Add goal', addStep:'Add step',
+  ongoing:'Ongoing projects', activeGoals:'Active goals', stepsDone:'Steps completed', allTime:'Recorded so far', active:'Active', paused:'Paused', completed:'Completed', pending:'To do', deferred:'Deferred',
+  yourProjects:'Your projects', projectsSub:'Different projects. One place to come back to.', projectCount:'{n} projects', openProject:'Open project', goalsCount:'{n} goals', stepsCount:'{n} steps remaining', completedCount:'{n} steps completed', updated:'Updated {date}',
+  pickUp:'Where to pick up', pickUpSub:'Your next actions, in your own words.', nextAction:'Next action', nextEmpty:'Give yourself a place to start next time.', setNext:'Set next action', editNext:'Edit next action', nextPlaceholder:'What would help you move this forward?',
+  progress:'Recent progress', progressSub:'Small steps count. Their history stays with you.', noActivity:'Your progress starts here.', noActivityBody:'Add a project or finish a step, and its dated record will appear here.',
+  emptyTitle:'Make space for your first project.', emptyBody:'Start with something on your mind. Add a goal, break it into steps, and keep the story as you go.', firstProject:'Create your first project',
+  back:'Back to overview', goals:'Goals & steps', goalsSub:'Keep the plan flexible. Keep the progress.', noGoals:'What are you working toward?', noGoalsBody:'Add a goal to give this project its first direction.', noSteps:'Break this goal into a first small step.',
+  activity:'Project history', activitySub:'What happened, and when.', context:'Project context', noContext:'A place to keep the purpose of this project.', purpose:'About this project',
+  completeStep:'Complete step', completedOn:'Completed {date}', emptyNext:'No next action set', completedOf:'{done} of {total} steps completed', addNewWork:'Discovered more work? Add a step without losing earlier progress.',
+  newProject:'New project', newProjectHint:'A home for a piece of your work. You can add goals inside it.', newGoal:'New goal', newGoalHint:'Choose a result to work toward within this project.', newStep:'New step', newStepHint:'Make the next piece of work clear and manageable.',
+  title:'Title', projectTitle:'Project name', goalTitle:'Goal title', stepTitle:'Step title', description:'Description', optional:'Optional', titlePlaceholder:'Give it a clear name', descriptionPlaceholder:'A little context for when you return…',
+  contextOptional:'Add context', reason:'Why add this?', reasonHint:'For example, something new you discovered while working.', helper:'Worked with', helperHint:'An assistant or collaborator, if any.',
+  cancel:'Cancel', save:'Save', createProject:'Create project', createGoal:'Create goal', createStep:'Create step', saving:'Saving…', saved:'Saved', close:'Close',
+  completionTitle:'A step forward.', completionHint:'This achievement keeps its own date. Your goal can stay in progress.', completionDate:'When did you finish?', completionReason:'Completion note', markComplete:'Record completion',
+  createdProject:'Project created', createdGoal:'Goal added', createdStep:'Step added', stepCompleted:'Step completed', nextUpdated:'Next action updated', settingUpdated:'Language changed', by:'With {name}', recorded:'Recorded {date}',
+  noData:'Nothing to show yet', loadFailed:'Could not open your workspace.', retry:'Try again', connection:'Cannot reach the local app. Your unsaved text is still here.',
+  invalid_input:'Check the highlighted fields.', not_found:'This item could not be found. Reload the latest work.', stale_revision:'Another tab saved newer work. Load the latest version, review your draft, then save again.', request_conflict:'This save request conflicts with an earlier one. Reload the latest work before retrying.', save_failed:'Your change could not be saved. Your draft is still here.', forbidden:'This page cannot save right now. Reload the app and try again.', invalid_request:'The request could not be processed.',
+  required:'Please enter a title.', badDate:'Choose a valid completion time.', badNoteDate:'Choose a valid note date and time.', reloadLatest:'Load latest version', loadedLatest:'Latest work loaded. Review your draft, then save.', discard:'Leave without saving your changes?',
+  previewSave:'This is a view-only preview. No data has been saved.', footer:'One step at a time.', footerHint:'Your work, kept in context.', demo:'Demo workspace · fictional projects',
+  changed:'Changed', allHistory:'All recorded activity', noNextActions:'Next actions will appear here when you add them to a project.', goalStatus:'Goal in progress', pendingGoals:'{n} active goals',
+ },
+ ar: {
+  editGoalName:'تعديل اسم الهدف', editStepName:'تعديل اسم الخطوة', renameHint:'غيّري الاسم مع الاحتفاظ بالملاحظات والتقدم والتاريخ السابق.', changeReason:'ليش تغيّر؟', moveStep:'نقل لهدف ثاني', moveHint:'انقلي الخطوة داخل نفس المشروع. ملاحظاتها وحالتها وتاريخ إنجازها الأصلي يظلون محفوظين.', currentGoal:'الهدف الحالي: {title}', destinationGoal:'نقل إلى هدف', chooseGoal:'اختاري هدف ثاني', noMoveGoals:'أضيفي هدف ثاني داخل هذا المشروع أولًا، وبعدها تقدرين تنقلين الخطوة له.', goalRenamed:'تغيّر اسم الهدف', stepRenamed:'تغيّر اسم الخطوة', stepMoved:'انتقلت الخطوة', renamedFromTo:'الاسم: {before} ← {after}', movedFromTo:'من {before} ← {after}',
+  removed:'مشالة من الخطة',removedOn:'انشالت {date}',removedHint:'هالخطوات خارج الخطة الحالية. ملاحظاتها وإنجازاتها تبقى محفوظة.',restoreTitle:'نرجّع هالخطوة للخطة؟',restoreHint:'ترجع لنفس الهدف بحالتها وملاحظاتها وتاريخ إنجازها الأصلي.',stepRemoved:'انشالت خطوة من الخطة',stepRestored:'رجعت خطوة للخطة',
+  projectIcon:'أيقونة المشروع',changeIcon:'تغيير أيقونة المشروع',iconHint:'اختاري أيقونة تميّز لج المشروع. تقدرين تغيّرينها بأي وقت.',iconUpdated:'تغيّرت أيقونة المشروع',icon_folder:'ملف',icon_chart:'رسم بياني',icon_spark:'لمعة',icon_award:'جائزة',icon_document:'مستند',icon_book:'كتاب',icon_code:'برمجة',icon_heart:'قلب',
+  viewAllGoals:'عرض كل الأهداف',allGoals:'أهدافج',totalGoals:'كل الأهداف',completedGoals:'أهداف مكتملة',pausedGoals:'أهداف مشاريع متوقفة',goalsOverviewHint:'كل دائرة تبيّن الخطوات المكتملة من الخطة الحالية. إكمال الهدف يظل قرارج.',stepsRemaining:'باقي {n} خطوات',noStepsPlanned:'ما تحددت خطوات للحين',stepsReady:'خلصت كل الخطوات الحالية. هالهدف للحين نشط.',
+
+  workspace:'مساحة العمل',navigation:'التنقل',historyNav:'تاريخ التقدم',previewShort:'معاينة التصميم',previewSidebar:'أمثلة وهمية. التغييرات ما تنحفظ.',localSidebar:'مشاريعج وتاريخها محفوظين على اللابتوب.',demoHint:'مساحة تدريب ببيانات وهمية.',
+  stepOptions:'خيارات الخطوة',removeStep:'إزالة من الخطة',removeTitle:'نشيل هالخطوة من الخطة؟',removeHint:'ملاحظاتها وتاريخها وإنجازاتها السابقة تبقى محفوظة، وتقدرين ترجعينها لاحقًا.',removeReason:'ليش شلتيها؟',removedSteps:'خطوات مشالة من الخطة',restoreStep:'إرجاع للخطة',
+  notesUpdates:'الملاحظات والتحديثات',addNote:'إضافة ملاحظة',noteKind:'ملاحظة',issueKind:'مشكلة',summaryKind:'ملخص',noteType:'النوع',noteBody:'شنو صار؟',noteHint:'شنو جربتي أو اكتشفتي أو واجهتي؟ اكتبي التفاصيل هني.',noteDate:'متى صار؟',noteGoal:'عن هالهدف',noteStep:'عن هالخطوة',noteEmpty:'سجلي شنو صار بهالجزء، وتبقى تفاصيله بمكانها.',newNote:'خلي التفاصيل محفوظة.',newNoteHint:'ملاحظة مؤرخة لهالجزء من الشغل، مستقلة عن الإنجاز.',structureHint:'أضيفي كثر ما تحتاجين أهداف، وتحت كل هدف خطواته.',notePreviewHint:'معاينة للشكل فقط. حفظ الملاحظات مو متاح هني للحين.',requiredNote:'اكتبي الملاحظة أول.',
+
+  brand:'Work Tracker',tagline:'مكان ترجعين له وتكملين من وين وقفتي.',overview:'نظرة عامة',projects:'المشاريع',local:'محفوظ على هذا اللابتوب',preview:'معاينة الشكل · بيانات تجريبية',previewNote:'تقدرين تتصفحين الشكل. الحفظ غير متاح بهالمعاينة.',skip:'انتقل للمحتوى',
+  eyebrow:'مساحة شغلج',heading:'مساحة تجمع كل شغلج.',intro:'شوفي وين وصلتي، واختاري خطوتج الياية.',addProject:'مشروع جديد',addGoal:'إضافة هدف',addStep:'إضافة خطوة',
+  ongoing:'مشاريع مستمرة',activeGoals:'أهداف نشطة',stepsDone:'خطوات منجزة',allTime:'كل الإنجازات المسجلة',active:'نشط',paused:'متوقف',completed:'مكتمل',pending:'باقي',deferred:'مؤجل',
+  yourProjects:'مشاريعج',projectsSub:'مشاريع مختلفة، ومكان واحد ترجعين له.',projectCount:'المشاريع: {n}',openProject:'فتح المشروع',goalsCount:'الأهداف: {n}',stepsCount:'{n} خطوات باقية',completedCount:'خطوات منجزة: {n}',updated:'آخر تحديث {date}',
+  pickUp:'من وين تكملين',pickUpSub:'خطواتج الياية، بكلماتج.',nextAction:'الخطوة الياية',nextEmpty:'حددي نقطة ترجعين تبدين منها.',setNext:'تحديد الخطوة الياية',editNext:'تعديل الخطوة الياية',nextPlaceholder:'شنو يساعدج تتقدمين بالمشروع؟',
+  progress:'آخر التقدم',progressSub:'كل خطوة محسوبة، وتاريخها يبقى.',noActivity:'من هني يبدأ تقدمج.',noActivityBody:'أضيفي مشروع أو أنجزي خطوة، وبيظهر سجلها بتاريخها هني.',
+  emptyTitle:'ابدئي بأول مشروع.',emptyBody:'اختاري شي تبين تشتغلين عليه. أضيفي هدف، قسميه لخطوات، وخلي تاريخ الشغل محفوظ.',firstProject:'إضافة أول مشروع',
+  back:'الرجوع للنظرة العامة',goals:'الأهداف والخطوات',goalsSub:'الخطة تتغير، والإنجاز يظل محفوظ.',noGoals:'شنو تبين تحققين؟',noGoalsBody:'أضيفي هدف يحدد أول اتجاه للمشروع.',noSteps:'قسمي هالهدف لأول خطوة بسيطة.',
+  activity:'تاريخ المشروع',activitySub:'شنو صار، ومتى.',context:'سياق المشروع',noContext:'مكان تحفظين فيه فكرة المشروع.',purpose:'عن المشروع',
+  completeStep:'إنجاز الخطوة',completedOn:'تم الإنجاز {date}',emptyNext:'ما تحددت الخطوة الياية',completedOf:'المنجز: {done} / {total}',addNewWork:'طلع شغل يديد؟ أضيفي خطوة، وإنجازج السابق يبقى.',
+  newProject:'مشروع جديد',newProjectHint:'مكان لشغلج، تضيفين داخله أهداف وخطوات.',newGoal:'هدف جديد',newGoalHint:'حددي نتيجة تبين توصلين لها داخل هالمشروع.',newStep:'خطوة جديدة',newStepHint:'حددي جزء واضح وتقدرين تشتغلين عليه.',
+  title:'العنوان',projectTitle:'اسم المشروع',goalTitle:'عنوان الهدف',stepTitle:'عنوان الخطوة',description:'الوصف',optional:'اختياري',titlePlaceholder:'اختاري اسم واضح',descriptionPlaceholder:'شوية تفاصيل تتذكرينها لما ترجعين…',
+  contextOptional:'إضافة سياق',reason:'ليش أضفتيها؟',reasonHint:'مثلاً شي اكتشفتيه أثناء الشغل.',helper:'اشتغلتي مع',helperHint:'اسم المساعد أو الشخص، إذا فيه.',
+  cancel:'إلغاء',save:'حفظ',createProject:'إنشاء المشروع',createGoal:'إضافة الهدف',createStep:'إضافة الخطوة',saving:'جاري الحفظ…',saved:'تم الحفظ',close:'إغلاق',
+  completionTitle:'خطوة لقدّام.',completionHint:'هالإنجاز ينحفظ بتاريخه، حتى لو الهدف للحين ما خلص.',completionDate:'متى خلصتيها؟',completionReason:'ملاحظة عن الإنجاز',markComplete:'تسجيل الإنجاز',
+  createdProject:'تم إنشاء المشروع',createdGoal:'انضاف هدف',createdStep:'انضافت خطوة',stepCompleted:'تم إنجاز خطوة',nextUpdated:'تحدّثت الخطوة الياية',settingUpdated:'تغيرت اللغة',by:'مع {name}',recorded:'تسجل {date}',
+  noData:'ما فيه شي مسجل للحين',loadFailed:'ما قدرنا نفتح مساحة الشغل.',retry:'إعادة المحاولة',connection:'ما نقدر نتصل بالتطبيق المحلي. النص اللي كتبتيه للحين موجود.',
+  invalid_input:'راجعي الخانات المحددة.',not_found:'ما لقينا هالعنصر. حمّلي آخر تحديث.',stale_revision:'تبويب ثاني حفظ شغل أحدث. حمّلي آخر نسخة، راجعي اللي كتبتيه، وبعدين احفظي.',request_conflict:'طلب الحفظ يتعارض مع طلب سابق. حمّلي آخر تحديث قبل المحاولة.',save_failed:'ما قدرنا نحفظ التغيير. النص اللي كتبتيه للحين موجود.',forbidden:'هالصفحة ما تقدر تحفظ الحين. أعيدي تحميل التطبيق وحاولي.',invalid_request:'ما قدرنا نعالج الطلب.',
+  required:'اكتبي عنوان أول.',badDate:'اختاري وقت إنجاز صحيح.',badNoteDate:'اختاري تاريخ ووقت صحيح للملاحظة.',reloadLatest:'تحميل آخر نسخة',loadedLatest:'تحمّلت آخر نسخة. راجعي اللي كتبتيه وبعدين احفظي.',discard:'تطلعين بدون حفظ التغييرات؟',
+  previewSave:'هذي معاينة للشكل فقط. ما تم حفظ أي بيانات.',footer:'خطوة، وبعدين خطوة.',footerHint:'شغلج وتفاصيله في مكان واحد.',demo:'مساحة تجريبية · مشاريع وهمية',
+  changed:'تغيير',allHistory:'كل الأحداث المسجلة',noNextActions:'الخطوات الياية تظهر هني لما تضيفينها للمشاريع.',goalStatus:'الهدف جاري',pendingGoals:'{n} أهداف نشطة',
+ }
+};
+function setLanguage(value) { language = value === 'ar' ? 'ar' : 'en'; document.documentElement.lang=language; document.documentElement.dir=language==='ar'?'rtl':'ltr'; }
+function getLanguage(){return language;}
+function t(key, values={}) { let result=messages[language][key] || messages.en[key] || key; if(language==='en' && values.n===1){const singular={projectCount:'1 project',goalsCount:'1 goal',stepsCount:'1 step remaining',completedCount:'1 step completed',pendingGoals:'1 active goal',stepsRemaining:'1 step remaining'};result=singular[key] || result;} if(language==='ar' && key==='stepsRemaining'){result=values.n===0?'ما بقى خطوات':values.n===1?'باقي خطوة':values.n===2?'باقي خطوتين':'باقي {n} خطوات';} if(language==='en' && key==='completedOf' && values.total===1)result='{done} of {total} step completed'; for(const [k,v] of Object.entries(values)) result=result.replaceAll(`{${k}}`,String(v)); return result; }
+
+class ApiError extends Error {
+ constructor(code, fields={}, status=0){super(code);this.code=code;this.fields=fields;this.status=status;}
+}
+async function readState(){return request('/api/state');}
+async function request(path, options={}) {
+ let response;
+ try {response=await fetch(path,{cache:'no-store',...options});} catch {throw new ApiError('connection');}
+ let result;
+ try {result=await response.json();} catch {throw new ApiError('connection');}
+ if(!response.ok || result.ok===false) throw new ApiError(result.error?.code || 'save_failed',result.error?.fields || {},response.status);
+ return result;
+}
+async function mutate(path,method,payload){
+ return request(path,{method,headers:{'Content-Type':'application/json','X-Request-Token':document.querySelector('meta[name="request-token"]').content},body:JSON.stringify(payload)});
+}
+
+function formatDate(value, withTime=false){
+ if(!value)return '';
+ const parsed=new Date(value);
+ if(Number.isNaN(parsed.getTime()))return '';
+ return new Intl.DateTimeFormat(getLanguage()==='ar'?'ar-KW':'en-GB',{calendar:'gregory',month:'short',day:'numeric',year:'numeric',...(withTime?{hour:'numeric',minute:'2-digit'}:{})}).format(parsed);
+}
+function localDateTimeNow(){const date=new Date();return new Date(date.getTime()-date.getTimezoneOffset()*60000).toISOString().slice(0,16);}
+
+// Current-plan progress is separate from dated achievement history.
+function stepProgress(steps, goalId){
+ const current=steps.filter(step=>step.goal_id===goalId && !step.archived_at);
+ const done=current.filter(step=>step.status==='completed').length;
+ return {total:current.length,done,remaining:current.length-done,percent:current.length?100*done/current.length:0};
+}
+function goalCounts(goals,projects){
+ const paused=new Set(projects.filter(p=>p.status==='paused').map(p=>p.id));
+ return {total:goals.length,active:goals.filter(g=>g.status==='active'&&!paused.has(g.project_id)).length,
+ completed:goals.filter(g=>g.status==='completed').length,
+ paused:goals.filter(g=>g.status==='active'&&paused.has(g.project_id)).length};
+}
+const projectIcons=['folder','chart','spark','award','document','book','code','heart'];
+function projectIconName(project){return projectIcons.includes(project.icon)?project.icon:'folder';}
+
+function el(tag, className='', text=null){const node=document.createElement(tag);if(className)node.className=className;if(text!==null)node.textContent=String(text);return node;}
+function textNode(tag, className, text){const node=el(tag,className,text);node.dir='auto';return node;}
+const shapes={
+ calendar:['M4 5h16v16H4ZM4 10h16M8 3v4M16 3v4'],download:['M12 3v12m-4-4 4 4 4-4M4 16v5h16v-5'],lock:['M7 10V7a5 5 0 0 1 10 0v3M5 10h14v11H5Z'],
+ chart:['M5 20V10M10 20V4M15 20v-7M20 20V7'],
+ award:['M12 3a5 5 0 1 1 0 10 5 5 0 0 1 0-10M8 12l-1 9 5-3 5 3-1-9'],
+ document:['M5 3h9l5 5v13H5ZM14 3v6h5M8 13h8M8 17h5'],
+ code:['m8 7-5 5 5 5m8-10 5 5-5 5M14 4l-4 16'],
+ heart:['M12 21 3.5 12.5C-2 6 7 0 12 7c5-7 14-1 8.5 5.5Z'],
+ globe:['M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0M3 12h18M12 3c5 5 5 13 0 18-5-5-5-13 0-18'],
+ archive:['M3 4h18v4H3ZM5 8v12h14V8M10 12h4'],
+ note:['M5 3h10l4 4v14H5ZM14 3v5h5M8 12h8M8 16h5'],
+ plus:['M12 5v14M5 12h14'],arrow:['M5 12h14m-6-6 6 6-6 6'],back:['M19 12H5m6-6-6 6 6 6'],check:['m5 12 4 4L19 6'],
+ grid:['M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z'],leaf:['M20 4c-10-2-17 5-13 12 7 4 14-3 13-12ZM4 20 15 9'],
+ target:['M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0M17 12a5 5 0 1 1-10 0 5 5 0 0 1 10 0M13 12a1 1 0 1 1-2 0 1 1 0 0 1 2 0'],
+ folder:['M3 7V5h6l2 3h10v11H3Z'],clock:['M12 8v5l3 2','M21 12a9 9 0 1 1-18 0 9 9 0 0 1 18 0'],
+ close:['m6 6 12 12M18 6 6 18'],edit:['m15 4 5 5-11 11H4v-5ZM13 6l5 5'],spark:['m12 3 2.5 6.5L21 12l-6.5 2.5L12 21l-2.5-6.5L3 12l6.5-2.5Z'],
+ book:['M12 5c-4-3-8-1-9 0v14c3-2 6-2 9 0 3-2 6-2 9 0V5c-3-2-6-2-9 0Zm0 0v14'],
+};
+function icon(name){const svg=document.createElementNS('http://www.w3.org/2000/svg','svg');svg.setAttribute('viewBox','0 0 24 24');svg.setAttribute('fill','none');svg.setAttribute('stroke','currentColor');svg.setAttribute('stroke-width','1.6');svg.setAttribute('stroke-linecap','round');svg.setAttribute('stroke-linejoin','round');svg.setAttribute('aria-hidden','true');svg.classList.add('icon');for(const d of shapes[name]||shapes.folder){const path=document.createElementNS(svg.namespaceURI,'path');path.setAttribute('d',d);svg.append(path);}return svg;}
+function button(label, onClick, className='button', symbol=null){const b=el('button',className);b.type='button';if(symbol)b.append(icon(symbol));b.append(el('span','',label));if(onClick)b.addEventListener('click',onClick);return b;}
+function badge(label, kind='active'){return el('span',`badge ${kind}`,label);}
+function heading(title,sub,action){const wrap=el('div','section-heading');const text=el('div');text.append(el('h2','',title));if(sub)text.append(el('p','section-sub',sub));wrap.append(text);if(action)wrap.append(action);return wrap;}
+function empty(title,body,action=null,symbol='leaf'){const box=el('div','empty-state');const mark=el('div','empty-symbol');mark.append(icon(symbol));box.append(mark,el('h3','',title),el('p','',body));if(action)box.append(action);return box;}
+function eventDetails(entry){if(entry.details)return entry.details;if(typeof entry.details_json==='object')return entry.details_json || {};try{return JSON.parse(entry.details_json||'{}');}catch{return {};}}
+function eventLabel(entry){
+ if(['note','issue','summary'].includes(entry.kind))return t(entry.kind==='note'?'noteKind':entry.kind==='issue'?'issueKind':'summaryKind');
+ const direct={goal_renamed:'goalRenamed',step_renamed:'stepRenamed',step_moved:'stepMoved',step_archived:'stepRemoved',step_restored:'stepRestored',icon_updated:'iconUpdated',project_updated:'changed'};if(direct[entry.action])return t(direct[entry.action]);
+ const detail=eventDetails(entry);const action=(entry.action||'').toLowerCase();const entity=detail.entity_type || detail.entity || '';
+ if(action.includes('complet'))return entity==='goal'?rtext('Goal completed','اكتمل الهدف'):t('stepCompleted');
+ if(action.includes('next') || (detail.after?.next_action!==undefined && action.includes('updat')))return t('nextUpdated');
+ if(action.includes('creat'))return t(entity==='project'?'createdProject':entity==='goal'?'createdGoal':'createdStep');
+ if(action.includes('language')||entity==='settings')return t('settingUpdated');
+ return t('changed');
+}
+function activityList(entries,state,{limit=null,showProject=false}={}){
+ const items=entries.filter(e=>e.project_id).slice().sort((a,b)=>(b.occurred_at||'').localeCompare(a.occurred_at||'') || (b.recorded_at||'').localeCompare(a.recorded_at||''));
+ if(!items.length)return empty(t('noActivity'),t('noActivityBody'),null,'clock');
+ const list=el('ol','activity-list');
+ for(const entry of (limit?items.slice(0,limit):items)){
+  const detail=eventDetails(entry);const isDone=(entry.action||'').includes('complet');const item=el('li','activity-item');
+  const dot=el('div',`activity-dot ${isDone?'is-complete':''}`);dot.append(icon(isDone?'check':'plus'));
+  const body=el('div','activity-body');const line=el('div','activity-line');line.append(el('span','event-action',eventLabel(entry)));
+  const title=detail.title || detail.after?.title || detail.entity_title || state.steps.find(s=>s.id===entry.step_id)?.title || state.goals.find(g=>g.id===entry.goal_id)?.title || '';
+  if(title)line.append(textNode('span','event-title',title));body.append(line);
+  const meta=el('div','activity-meta');if(showProject){const project=state.projects.find(p=>p.id===entry.project_id);if(project)meta.append(textNode('span','project-reference',project.title));}
+  const time=el('time','',formatDate(entry.occurred_at,true));time.dateTime=entry.occurred_at;meta.append(time);if(entry.agent_name)meta.append(textNode('span','',t('by',{name:entry.agent_name})));body.append(meta);
+  if(['goal_renamed','step_renamed'].includes(entry.action))body.append(textNode('p','event-note',t('renamedFromTo',{before:detail.before?.title||'',after:detail.after?.title||''})));
+  if(entry.action==='step_moved')body.append(textNode('p','event-note',t('movedFromTo',{before:detail.source_goal?.title||'',after:detail.destination_goal?.title||''})));
+  const reason=entry.text || detail.reason;if(reason)body.append(textNode('p','event-note',reason));
+  item.append(dot,body);list.append(item);
+ }
+ return list;
+}
+
+
+const previewData = window.WORK_TRACKER_PREVIEW || null;
+let state = null;
+let currentProject = null;
+let pendingGoalFocus = null;
+let dirty = false;
+let saving = false;
+let lastPayload = null;
+let lastRequestId = null;
+let lastFocus = null;
+let modalBaseline = '';
+const main = document.getElementById('main');
+const editor = document.getElementById('editor');
+let toastTimer;
+
+// #main is an in-page destination, not a workspace route. Keep the project hash.
+document.querySelector('.skip-link').addEventListener('click',event=>{
+ event.preventDefault();
+ main.focus({preventScroll:true});
+ main.scrollIntoView({block:'start'});
+});
+
+function announce(message){const area=document.getElementById('toast');area.textContent=message;area.hidden=false;clearTimeout(toastTimer);toastTimer=setTimeout(()=>{area.hidden=true;},5000);}
+function openProject(id){location.hash=`project/${id}`;}
+function projectGoals(id){return state.goals.filter(g=>g.project_id===id).sort((a,b)=>a.position-b.position);}
+function goalSteps(id){return state.steps.filter(s=>s.goal_id===id&&!s.archived_at).sort((a,b)=>a.position-b.position);}
+function projectSteps(id){const ids=new Set(projectGoals(id).map(g=>g.id));return state.steps.filter(s=>ids.has(s.goal_id));}
+function achievedSteps(projectId=null){const ids=new Set();for(const e of state.entries){if(projectId && e.project_id!==projectId)continue;const d=eventDetails(e);if(e.action==='step_completed')ids.add(d.entity_id || e.step_id);}return ids.size;}
+function formString(){const form=editor.querySelector('form');return form?JSON.stringify([...new FormData(form)]):'';}
+function trackDraft(){dirty=formString()!==modalBaseline;}
+function closeEditor(force=false){if(saving)return;if(!force&&dirty&&!window.confirm(t('discard')))return;editor.close();editor.classList.remove('goals-dialog');dirty=false;lastPayload=null;lastRequestId=null;if(lastFocus?.isConnected)lastFocus.focus();}
+editor.addEventListener('cancel',event=>{event.preventDefault();closeEditor();});
+window.addEventListener('beforeunload',event=>{if(dirty){event.preventDefault();event.returnValue='';}});
+
+function baseRenderHeader(){
+ const sidebar=document.getElementById('workspace-sidebar');sidebar.replaceChildren();
+ const brand=el('a','brand-link');brand.href='#overview';const mark=el('span','brand-icon');mark.append(icon('check'));brand.append(mark,el('span','brand-word',t('brand')));sidebar.append(brand,el('p','sidebar-label',t('workspace')));
+ const nav=el('nav','sidebar-nav');nav.setAttribute('aria-label',t('workspace'));
+ const overview=el('a',`sidebar-link ${currentProject?'':'selected'}`);overview.href='#overview';overview.append(icon('grid'),el('span','',t('overview')));if(!currentProject)overview.setAttribute('aria-current','page');nav.append(overview);
+ const projects=button(t('projects'),()=>{if(currentProject){location.hash='overview';}else{document.getElementById('projects')?.scrollIntoView();}},'sidebar-link','folder');projects.append(el('span','sidebar-count',state.projects.length));nav.append(projects);
+ nav.append(button(t('historyNav'),()=>document.getElementById('progress')?.scrollIntoView(),'sidebar-link','clock'));sidebar.append(nav,el('p','sidebar-label projects-label',t('yourProjects')));
+ const links=el('nav','sidebar-projects');links.setAttribute('aria-label',t('yourProjects'));
+ for(const [i,project] of state.projects.slice().sort((a,b)=>a.position-b.position).entries()){
+  const link=el('a',`sidebar-link project-shortcut tone-${i%3} ${currentProject?.id===project.id?'selected':''}`);link.href=`#project/${project.id}`;link.append(icon(projectIconName(project)),textNode('span','sidebar-project-name',project.title));if(currentProject?.id===project.id)link.setAttribute('aria-current','page');links.append(link);
+ }
+ sidebar.append(links);const local=el('div','sidebar-storage');local.append(icon(previewData?'note':'folder'));const localText=el('div');localText.append(el('strong','',t(previewData?'previewShort':'local')),el('p','',t(previewData?'previewSidebar':'localSidebar')));local.append(localText);sidebar.append(local);
+ const header=document.getElementById('app-header');header.replaceChildren();const bar=el('div','header-inner');const trail=el('nav','breadcrumb');trail.setAttribute('aria-label',t('navigation'));const home=el('a','',t('brand'));home.href='#overview';trail.append(home,el('span','breadcrumb-divider','/'),textNode('span','breadcrumb-current',currentProject?.title||t('overview')));
+ const end=el('div','header-end');const lang=button(getLanguage()==='en'?'العربية':'English',()=>changeLanguage(),'language-button','globe');lang.lang=getLanguage()==='en'?'ar':'en';end.append(lang);bar.append(trail,end);header.append(bar);
+ document.querySelector('.skip-link').textContent=t('skip');
+ const preview=document.getElementById('preview-notice');preview.hidden=!previewData&&!state.demo_mode;
+ if(!preview.hidden){preview.className='preview-strip';preview.replaceChildren(el('strong','',t(previewData?'previewShort':'demo')),el('span','',t(previewData?'previewNote':'demoHint')));}
+ const footer=document.getElementById('app-footer');footer.replaceChildren(el('span','footer-brand',t('footer')),el('span','',t('footerHint')));
+}
+function stat(label,count,symbol,extra='',onClick=null){const card=el(onClick?'button':'div',onClick?'stat stat-button':'stat');if(onClick){card.type='button';card.addEventListener('click',onClick);card.setAttribute('aria-haspopup','dialog');}const marker=el('div','stat-symbol');marker.append(icon(symbol));const text=el('div','stat-label');text.append(el('span','',label),el('strong','stat-value',count));if(extra)text.append(el('span','stat-sub',extra));card.append(marker,text);return card;}
+function baseRenderOverview(){
+ const hero=el('section','workspace-hero');const intro=el('div');intro.append(el('p','workspace-date',new Intl.DateTimeFormat(getLanguage()==='ar'?'ar-KW':'en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric',calendar:'gregory'}).format(new Date())),el('h1','',t('overview')));hero.append(intro,button(t('addProject'),()=>showCreate('project'),'button primary','plus'));
+ const stats=el('section','stats-row');stats.setAttribute('aria-label',t('overview'));stats.append(stat(t('ongoing'),state.projects.length,'folder'),stat(t('activeGoals'),goalCounts(state.goals,state.projects).active,'target',t('viewAllGoals'),showGoals),stat(t('stepsDone'),achievedSteps(),'check',t('allTime')));
+ const body=el('div','overview-grid');const left=el('div','overview-primary');const projects=el('section','project-section');projects.id='projects';projects.append(heading(t('yourProjects'),t('projectsSub'),badge(t('projectCount',{n:state.projects.length}),'neutral')));
+ if(!state.projects.length){projects.append(empty(t('emptyTitle'),t('emptyBody'),button(t('firstProject'),()=>showCreate('project'),'button primary','plus')));}else{
+  const grid=el('div','projects-grid');for(const [i,p] of state.projects.slice().sort((a,b)=>a.position-b.position).entries())grid.append(projectCard(p,i));projects.append(grid);
+ }
+ const recent=el('section','recent-section');recent.id='progress';recent.append(heading(t('progress'),t('progressSub')));const history=el('div','surface recent-surface');history.append(activityList(state.entries,state,{limit:6,showProject:true}));recent.append(history);left.append(projects,recent);
+ const aside=el('aside','next-panel');const asideTop=el('div','next-panel-heading');const mark=el('div','next-mark');mark.append(icon('spark'));asideTop.append(mark,el('h2','',t('pickUp')),el('p','',t('pickUpSub')));aside.append(asideTop);
+ const nextProjects=state.projects.filter(p=>p.status!=='paused'&&p.next_action);
+ if(!nextProjects.length)aside.append(el('p','next-list-empty',t('noNextActions')));
+ for(const [i,p] of nextProjects.entries()){const card=el('a','next-card');card.href=`#project/${p.id}`;const top=el('div','next-card-top');top.append(el('span','next-index',String(i+1).padStart(2,'0')),icon('arrow'));card.append(top,textNode('h3','',p.next_action),textNode('span','next-project',p.title));aside.append(card);}
+ const asideFoot=el('div','next-panel-footer');asideFoot.append(icon('leaf'),el('span','',t('footer')));aside.append(asideFoot);
+ body.append(left,aside);main.append(hero,stats,body);
+}
+function projectCard(project,index){
+ const card=el('article',`project-card tone-${index%3}`);const top=el('div','project-card-top');const mark=projectIconButton(project);top.append(mark,badge(t(project.status),project.status));
+ const link=el('a','project-title-link');link.href=`#project/${project.id}`;link.append(textNode('h3','',project.title));const desc=textNode('p','project-description',project.description || t('noContext'));
+ const meta=el('div','project-counts');const goals=el('span');goals.append(icon('target'),el('span','',t('goalsCount',{n:projectGoals(project.id).length})));const done=el('span');done.append(icon('check'),el('span','',t('completedCount',{n:achievedSteps(project.id)})));meta.append(goals,done);
+ const foot=el('div','project-card-bottom');foot.append(el('time','',t('updated',{date:formatDate(project.updated_at)})),button(t('openProject'),()=>openProject(project.id),'button text-button card-open','arrow'));foot.querySelector('button').setAttribute('aria-label',`${t('openProject')}: ${project.title}`);
+ card.append(top,link,desc,meta,foot);return card;
+}
+function renderProject(project){
+ const back=el('a','back-link');back.href='#overview';back.append(icon('back'),el('span','',t('back')));main.append(back);
+ const hero=el('section','project-hero');const intro=el('div');const label=el('div','project-eyebrow');label.append(projectIconButton(project),el('p','eyebrow',t('projects')),badge(t(project.status),project.status));intro.append(label,textNode('h1','',project.title));if(project.description)intro.append(textNode('p','hero-subtitle',project.description));hero.append(intro,button(t('addGoal'),()=>showCreate('goal',{project_id:project.id}),'button primary','plus'));main.append(hero);
+ const content=el('div','project-layout');const goals=el('section','project-goals');goals.append(heading(t('goals'),t('goalsSub')));
+ if(previewData){const hint=el('p','structure-hint');hint.append(icon('target'),el('span','',t('structureHint')));goals.append(hint);}
+ const list=projectGoals(project.id);if(!list.length)goals.append(empty(t('noGoals'),t('noGoalsBody'),button(t('addGoal'),()=>showCreate('goal',{project_id:project.id}),'button secondary','plus'),'target'));
+ for(const [i,g] of list.entries())goals.append(goalCard(g,i));
+ const activity=el('section','project-activity');activity.id='progress';activity.append(heading(t('activity'),t('activitySub')));const panel=el('div','surface');panel.append(activityList(state.entries.filter(e=>e.project_id===project.id),state));activity.append(panel);
+ const aside=el('aside','project-aside');const next=el('section','next-action-box');const nextLabel=el('div','aside-label');nextLabel.append(icon('arrow'),el('span','',t('nextAction')));next.append(nextLabel,textNode('p',project.next_action?'next-action-text':'next-action-placeholder',project.next_action||t('nextEmpty')),button(t(project.next_action?'editNext':'setNext'),()=>showNext(project),'button next-edit','edit'));
+ const context=el('section','context-card');context.append(el('p','eyebrow',t('context')),el('h3','',t('purpose')),textNode('p','context-description',project.description||t('noContext')));const achievement=el('div','context-achievement');achievement.append(icon('check'),el('span','',t('completedCount',{n:achievedSteps(project.id)})));context.append(achievement);aside.append(next,context);content.append(goals,aside,activity);main.append(content);
+}
+function goalCard(goal,index){
+ const details=el('details','goal-card');details.open=true;details.id=`goal-${goal.id}`;
+ const summary=el('summary','goal-summary');const number=el('span','goal-number',String(index+1).padStart(2,'0'));
+ const title=el('div','goal-title');title.append(textNode('h3','',goal.title));const steps=goalSteps(goal.id);
+ title.append(el('span','goal-meta',t('completedOf',{done:steps.filter(s=>s.status==='completed').length,total:steps.length})));
+ summary.append(number,title,el('span','chevron','⌄'));details.append(summary);
+ const body=el('div','goal-body');if(goal.description)body.append(textNode('p','goal-description',goal.description));
+ if(!steps.length)body.append(el('p','empty-steps',t('noSteps')));
+ const list=el('ul','steps-list');for(const step of steps)list.append(stepRow(step));body.append(list);
+ const removed=state.steps.filter(s=>s.goal_id===goal.id&&s.archived_at).sort((a,b)=>a.position-b.position);
+ if(removed.length){
+  const archive=el('details','removed-steps');const trigger=el('summary','',`${t('removedSteps')} (${removed.length})`);
+  const removedList=el('ul','steps-list');for(const step of removed)removedList.append(stepRow(step));
+  archive.append(trigger,el('p','section-sub',t('removedHint')),removedList);body.append(archive);
+ }
+ const foot=el('div','goal-footer');foot.append(button(t('addStep'),()=>showCreate('step',{goal_id:goal.id}),'button text-button','plus'));
+ const rename=button(t('editGoalName'),()=>showRename('goal',goal),'button text-button','edit');rename.setAttribute('aria-label',`${t('editGoalName')}: ${goal.title}`);foot.append(rename);
+ body.append(foot);if(previewData)body.append(contextNotes('goal',goal));details.append(body);return details;
+}
+function stepRow(step){
+ const removed=!!step.archived_at,done=step.status==='completed';
+ const row=el('li',`step-row ${done?'is-done':''} ${removed?'is-removed':''}`);
+ const check=button('',removed||done?null:()=>showCompletion(step),'step-toggle',removed?'archive':done?'check':null);
+ check.setAttribute('aria-label',`${t(removed?'removed':done?'completed':'completeStep')}: ${step.title}`);check.disabled=removed||done;
+ const text=el('div','step-content');const stepTitle=button(step.title,()=>showContextNote('step',step),'step-title step-title-button');
+ stepTitle.dir='auto';stepTitle.setAttribute('aria-label',`${t('addNote')}: ${step.title}`);text.append(stepTitle);
+ if(step.description)text.append(textNode('p','step-description',step.description));
+ if(step.completed_at)text.append(el('span','completion-date',t('completedOn',{date:formatDate(step.completed_at,true)})));
+ if(removed)text.append(el('span','completion-date',t('removedOn',{date:formatDate(step.archived_at,true)})));
+ text.append(contextNotes('step',step));row.append(check,text);
+ const side=el('div','step-side');if(done)side.append(badge(t('completed'),'completed'));
+ if(removed){const restore=button(t('restoreStep'),()=>showRestoration(step),'button text-button','back');restore.setAttribute('aria-label',`${t('restoreStep')}: ${step.title}`);side.append(restore);}
+ {const menu=el('details','step-menu');const trigger=el('summary','','···');trigger.setAttribute('aria-label',`${t('stepOptions')}: ${step.title}`);
+  const popover=el('div','step-menu-popover');popover.append(button(t('editStepName'),()=>{menu.open=false;showRename('step',step);},'button text-button','edit'),button(t('moveStep'),()=>{menu.open=false;showMove(step);},'button text-button','arrow'));if(!removed)popover.append(button(t('removeStep'),()=>{menu.open=false;showRemoval(step);},'button text-button','archive'));menu.append(trigger,popover);side.append(menu);}
+ row.append(side);return row;
+}
+
+// Step notes work in the live app. Other contextual entry types remain preview-only.
+function contextNotes(level,item){
+ const isStep=level==='step';
+ const entries=state.entries.filter(e=>['note','issue','summary'].includes(e.kind) && (isStep?e.step_id===item.id:e.goal_id===item.id&&!e.step_id)).slice().sort((a,b)=>a.occurred_at.localeCompare(b.occurred_at)||a.recorded_at.localeCompare(b.recorded_at));
+ const disclosure=el('details',`context-disclosure ${isStep?'step-context':'goal-context'}`);
+ disclosure.open=entries.length>0;
+ const summary=el('summary');summary.append(icon('note'),el('span','',t('notesUpdates')),el('span','context-count',entries.length));disclosure.append(summary);
+ const log=el('div','context-log');log.append(el('p','context-log-label',t(isStep?'noteStep':'noteGoal')));
+ if(!entries.length)log.append(el('p','context-empty',t('noteEmpty')));
+ for(const entry of entries){const note=el('article','context-note');const top=el('div','context-note-head');top.append(el('span',`context-note-kind ${entry.kind}`,t(entry.kind==='issue'?'issueKind':entry.kind==='summary'?'summaryKind':'noteKind')));const date=el('time','',formatDate(entry.occurred_at,true));date.dateTime=entry.occurred_at;top.append(date);note.append(top,textNode('p','context-note-body',entry.text));if(entry.agent_name)note.append(textNode('span','context-note-helper',t('by',{name:entry.agent_name})));log.append(note);}
+ log.append(button(t('addNote'),()=>showContextNote(level,item),'button text-button','plus'));disclosure.append(log);return disclosure;
+}
+function showContextNote(level,item){
+ if(!previewData && level!=='step')return;
+ const m=modal(t('newNote'),t('newNoteHint'),t('save'),values=>{
+  if(previewData)throw new ApiError('previewSave');
+  const payload={text:values.text,agent_name:values.agent_name};
+  if(values.occurred_at){const when=new Date(values.occurred_at);if(Number.isNaN(when.getTime()))throw new ApiError('invalid_input',{occurred_at:'invalid'});payload.occurred_at=when.toISOString();}
+  return submitMutation(`/api/steps/${item.id}/notes`,'POST',payload);
+ });
+ const target=el('div','note-target',t(level==='step'?'noteStep':'noteGoal'));target.append(textNode('strong','',item.title));m.fields.append(target);
+ if(previewData){const types=el('div','field');const label=el('label','field-label',t('noteType'));label.htmlFor='field-kind';const select=el('select','input note-type-select');select.name='kind';select.id='field-kind';for(const [value,key] of [['note','noteKind'],['issue','issueKind'],['summary','summaryKind']]){const option=el('option','',t(key));option.value=value;select.append(option);}types.append(label,select);m.fields.append(types);}
+ field(m.fields,'text',t('noteBody'),{required:true,multiline:true,placeholder:t('noteHint')});field(m.fields,'occurred_at',t('noteDate'),{value:localDateTimeNow(),type:'datetime-local'});field(m.fields,'agent_name',t('helper'),{hint:t('helperHint')});if(previewData)m.fields.append(el('p','note-preview-hint',t('notePreviewHint')));m.open();
+}
+function showRename(type,item){
+ const m=modal(t(type==='goal'?'editGoalName':'editStepName'),t('renameHint'),t('save'),values=>submitMutation(`/api/${type}s/${item.id}/title`,'PATCH',values));
+ field(m.fields,'title',t(`${type}Title`),{value:item.title,required:true});field(m.fields,'reason',t('changeReason'),{multiline:true});m.open();
+}
+function showMove(step){
+ const source=state.goals.find(g=>g.id===step.goal_id);const targets=projectGoals(source.project_id).filter(g=>g.id!==source.id);
+ if(!targets.length){const m=modal(t('moveStep'),t('noMoveGoals'),t('close'),async()=>{});m.form.querySelector('[type=submit]').hidden=true;m.fields.append(textNode('p','completion-step-title',step.title));m.open();return;}
+ const m=modal(t('moveStep'),t('moveHint'),t('moveStep'),values=>submitMutation(`/api/steps/${step.id}/move`,'POST',values));
+ m.fields.append(textNode('p','completion-step-title',step.title),textNode('p','section-sub',t('currentGoal',{title:source.title})));
+ const wrap=el('div','field'),label=el('label','field-label',t('destinationGoal'));label.htmlFor='field-goal_id';
+ const select=el('select','input');select.id='field-goal_id';select.name='goal_id';select.required=true;select.setAttribute('aria-describedby','error-goal_id');
+ const placeholder=el('option','',t('chooseGoal'));placeholder.value='';select.append(placeholder);
+ for(const goal of targets){const option=textNode('option','',goal.title);option.value=goal.id;select.append(option);}
+ const error=el('span','field-error');error.id='error-goal_id';wrap.append(label,select,error);m.fields.append(wrap);
+ field(m.fields,'reason',t('changeReason'),{multiline:true});m.open();
+}
+function showRemoval(step){
+ const m=modal(t('removeTitle'),t('removeHint'),t('removeStep'),values=>submitMutation(`/api/steps/${step.id}/archive`,'POST',values));
+ m.fields.append(textNode('p','completion-step-title',step.title));field(m.fields,'reason',t('removeReason'),{multiline:true});m.open();
+}
+function showRestoration(step){
+ const m=modal(t('restoreTitle'),t('restoreHint'),t('restoreStep'),values=>submitMutation(`/api/steps/${step.id}/restore`,'POST',values));
+ m.fields.append(textNode('p','completion-step-title',step.title));field(m.fields,'reason',t('reason'),{multiline:true});m.open();
+}
+function projectIconButton(project){
+ const b=button('',()=>showProjectIcon(project),'project-icon project-icon-button',projectIconName(project));
+ b.setAttribute('aria-label',`${t('changeIcon')}: ${project.title}`);b.title=t('changeIcon');return b;
+}
+function iconPicker(fields,value='folder'){
+ const group=el('fieldset','icon-picker');group.append(el('legend','field-label',t('projectIcon')));
+ const choices=el('div','icon-choices');
+ for(const name of projectIcons){const label=el('label','icon-choice');const input=el('input');input.type='radio';input.name='icon';input.value=name;input.checked=name===value;
+  const visual=el('span','icon-choice-face');visual.append(icon(name),el('span','',t(`icon_${name}`)));label.append(input,visual);choices.append(label);}
+ group.append(choices);fields.append(group);
+}
+function showProjectIcon(project){
+ const m=modal(t('changeIcon'),t('iconHint'),t('save'),values=>submitMutation(`/api/projects/${project.id}`,'PATCH',values));
+ m.fields.append(textNode('p','completion-step-title',project.title));iconPicker(m.fields,projectIconName(project));m.open();
+}
+function progressRing(progress){
+ const ns='http://www.w3.org/2000/svg';const svg=document.createElementNS(ns,'svg');svg.classList.add('goal-ring');svg.setAttribute('viewBox','0 0 64 64');svg.setAttribute('role','img');
+ svg.setAttribute('aria-label',progress.total?t('completedOf',{done:progress.done,total:progress.total}):t('noStepsPlanned'));
+ for(const [className,amount] of [['ring-track',100],['ring-fill',progress.percent]]){const circle=document.createElementNS(ns,'circle');
+  for(const [name,value] of Object.entries({cx:32,cy:32,r:27,pathLength:100,fill:'none','stroke-width':5,'stroke-dasharray':`${amount} 100`,transform:'rotate(-90 32 32)'}))circle.setAttribute(name,value);
+  circle.classList.add(className);svg.append(circle);}
+ const number=document.createElementNS(ns,'text');number.setAttribute('x','32');number.setAttribute('y','36');number.setAttribute('text-anchor','middle');number.textContent=progress.total?`${progress.done}/${progress.total}`:'—';svg.append(number);return svg;
+}
+function showGoals(){
+ if(editor.open)closeEditor(true);lastFocus=document.activeElement;dirty=false;editor.replaceChildren();editor.classList.add('goals-dialog');
+ const close=button(t('close'),()=>closeEditor(),'button secondary');const head=el('div','goals-dialog-head');const title=el('h2','',t('allGoals'));title.id='editor-title';head.append(title,close);editor.append(head);
+ const counts=goalCounts(state.goals,state.projects);editor.append(el('p','modal-intro',t('goalsOverviewHint')));
+ const totals=el('div','goal-totals');for(const [key,label] of [['total','totalGoals'],['active','activeGoals'],['completed','completedGoals'],['paused','pausedGoals']])totals.append(el('span','badge neutral',`${t(label)}: ${counts[key]}`));editor.append(totals);
+ const list=el('div','goals-overview-list');
+ for(const goal of state.goals){const project=state.projects.find(p=>p.id===goal.project_id);if(!project)continue;
+  const progress=stepProgress(state.steps,goal.id);const card=el('article','goal-progress-card');const body=el('div','goal-progress-body');
+  const go=button(goal.title,()=>{closeEditor(true);openGoal(project.id,goal.id);},'goal-progress-link');go.dir='auto';body.append(go,textNode('p','goal-project-name',project.title));
+  const meta=el('div','goal-progress-meta');meta.append(badge(t(goal.status==='completed'?'completed':project.status==='paused'?'paused':'active'),goal.status==='completed'?'completed':'neutral'));
+  meta.append(el('span','',progress.total?t('stepsRemaining',{n:progress.remaining}):t('noStepsPlanned')));body.append(meta);
+  if(progress.total&&progress.remaining===0&&goal.status!=='completed')body.append(el('p','goal-ready-hint',t('stepsReady')));
+  card.append(progressRing(progress),body);list.append(card);
+ }
+ if(!state.goals.length)list.append(empty(t('noGoals'),t('noGoalsBody')));editor.append(list);editor.showModal();close.focus();
+}
+function openGoal(projectId,goalId){
+ pendingGoalFocus=goalId;if(location.hash===`#project/${projectId}`){render();focusRequestedGoal();}else location.hash=`project/${projectId}`;
+}
+
+function baseRender(){
+ if(!state)return;const match=location.hash.match(/^#project\/([^/]+)$/);currentProject=match?state.projects.find(p=>p.id===decodeURIComponent(match[1])):null;renderHeader();main.replaceChildren();if(match&&!currentProject){main.append(empty(t('not_found'),'',button(t('back'),()=>{location.hash='overview';},'button primary')));return;}
+ if(currentProject)renderProject(currentProject);else renderOverview();document.title=currentProject?`${currentProject.title} · Work Tracker`:'Work Tracker';
+}
+function focusRequestedGoal(){const target=document.getElementById(`goal-${pendingGoalFocus}`);pendingGoalFocus=null;target?.scrollIntoView({block:'center'});target?.querySelector('summary')?.focus();}
+window.addEventListener('hashchange',()=>{render();if(pendingGoalFocus)focusRequestedGoal();else window.scrollTo({top:0,behavior:'instant'});});
+
+function field(form,name,label,{value='',type='text',required=false,hint='',placeholder='',multiline=false}={}){
+ const wrap=el('div','field');const labelNode=el('label','field-label',label);labelNode.htmlFor=`field-${name}`;if(!required)labelNode.append(el('span','optional',t('optional')));
+ const input=el(multiline?'textarea':'input','input');input.id=`field-${name}`;input.name=name;input.value=value;input.dir='auto';if(!multiline)input.type=type;else input.rows=3;
+ if(required)input.required=true;if(placeholder)input.placeholder=placeholder;
+ const error=el('span','field-error');error.id=`error-${name}`;input.setAttribute('aria-describedby',error.id);
+ wrap.append(labelNode,input);if(hint){const hintNode=el('span','field-hint',hint);hintNode.id=`hint-${name}`;input.setAttribute('aria-describedby',`${hintNode.id} ${error.id}`);wrap.append(hintNode);}wrap.append(error);form.append(wrap);return input;
+}
+function modal(title,description,submitLabel,onSubmit){
+ if(editor.open)closeEditor(true);lastFocus=document.activeElement;editor.replaceChildren();lastPayload=null;lastRequestId=null;
+ const head=el('div','modal-head');const mark=el('div','modal-icon');mark.append(icon('plus'));const close=button(t('close'),()=>closeEditor(),'icon-button modal-close','close');close.setAttribute('aria-label',t('close'));head.append(mark,close);
+ const h=el('h2','',title);h.id='editor-title';const intro=el('p','modal-intro',description);
+ const form=el('form','editor-form');form.noValidate=true;const fields=el('div','form-fields');if(previewData)form.append(el('p','modal-preview-note',t('previewNote')));form.append(fields);
+ const error=el('div','form-error');error.setAttribute('role','alert');error.hidden=true;
+ const actions=el('div','form-actions');const submit=el('button','button primary',submitLabel);submit.type='submit';actions.append(button(t('cancel'),()=>closeEditor(),'button secondary'),submit);form.append(error,actions);
+ editor.append(head,h,intro,form);form.addEventListener('input',trackDraft);form.addEventListener('change',trackDraft);
+ form.addEventListener('submit',async event=>{
+  event.preventDefault();if(saving)return;
+  form.querySelectorAll('.field-error').forEach(n=>n.textContent='');form.querySelectorAll('[aria-invalid]').forEach(n=>n.removeAttribute('aria-invalid'));error.hidden=true;error.replaceChildren();
+  for(const input of form.querySelectorAll('[required]')){if(!input.value.trim()){input.setAttribute('aria-invalid','true');document.getElementById(`error-${input.name}`).textContent=t(input.name==='text'?'requiredNote':input.name==='goal_id'?'chooseGoal':'required');input.focus();return;}}
+  if(previewData){error.textContent=t('previewSave');error.hidden=false;return;}
+  saving=true;submit.disabled=true;submit.textContent=t('saving');form.querySelectorAll('input,textarea,select,button').forEach(n=>n.disabled=true);
+  try {await onSubmit(Object.fromEntries(FormDataValues(form)));saving=false;closeEditor(true);render();announce(t('saved'));}
+  catch(e){error.hidden=false;error.append(el('p','',t(e.code||'save_failed')));for(const [name] of Object.entries(e.fields||{})){const input=form.elements.namedItem(name);const label=document.getElementById(`error-${name}`);if(input){input.setAttribute('aria-invalid','true');if(label)label.textContent=t(name==='completion_at'?'badDate':name==='occurred_at'?'badNoteDate':'invalid_input');}}
+   if(e.code==='stale_revision'||e.code==='request_conflict'){error.append(button(t('reloadLatest'),async()=>{try{state=await readState();lastPayload=null;lastRequestId=null;render();error.replaceChildren(el('p','',t('loadedLatest')));}catch{error.replaceChildren(el('p','',t('connection')));}},'button secondary'));}
+  }finally{saving=false;form.querySelectorAll('input,textarea,select,button').forEach(n=>n.disabled=false);submit.textContent=submitLabel;}
+ });
+ return {form,fields,open:()=>{editor.showModal();modalBaseline=formString();dirty=false;const focus=fields.querySelector('input:not([type=radio]),textarea,select')||fields.querySelector('input[type=radio]:checked');focus?.focus();}};
+}
+// Read disabled inputs too: the form is locked while its save is in flight.
+function FormDataValues(form){return [...form.elements].filter(n=>n.name && !['button','submit'].includes(n.type) && (!['radio','checkbox'].includes(n.type)||n.checked)).map(n=>[n.name,n.value]);}
+async function submitMutation(path,method,values){
+ const key=JSON.stringify({path,method,values});if(key!==lastPayload){lastRequestId=crypto.randomUUID();lastPayload=key;}
+ const result=await mutate(path,method,{...values,expected_revision:state.revision,request_id:lastRequestId});state=result.data;return result;
+}
+function contextFields(fields){const extra=el('details','form-context');extra.append(el('summary','',t('contextOptional')));const inner=el('div','context-fields');field(inner,'reason',t('reason'),{hint:t('reasonHint'),multiline:true});field(inner,'agent_name',t('helper'),{hint:t('helperHint')});extra.append(inner);fields.append(extra);}
+function showCreate(type,parent={}){
+ const cap=type[0].toUpperCase()+type.slice(1);const m=modal(t(`new${cap}`),t(`new${cap}Hint`),t(`create${cap}`),async values=>{const result=await submitMutation(`/api/${type}s`,'POST',{...parent,...values});if(type==='project')location.hash=`project/${result.entity_id}`;});
+ field(m.fields,'title',t(`${type}Title`),{required:true,placeholder:t('titlePlaceholder')});field(m.fields,'description',t('description'),{multiline:true,placeholder:t('descriptionPlaceholder')});if(type==='project'){field(m.fields,'next_action',t('nextAction'),{placeholder:t('nextPlaceholder')});iconPicker(m.fields);}contextFields(m.fields);m.open();
+}
+function showNext(project){const m=modal(t('editNext'),t('nextEmpty'),t('save'),values=>submitMutation(`/api/projects/${project.id}`,'PATCH',values));field(m.fields,'next_action',t('nextAction'),{value:project.next_action,multiline:true,placeholder:t('nextPlaceholder')});m.open();}
+function showCompletion(step){const m=modal(t('completionTitle'),t('completionHint'),t('markComplete'),values=>{const when=new Date(values.completion_at);if(Number.isNaN(when.getTime()))throw new ApiError('invalid_input',{completion_at:'invalid'});return submitMutation(`/api/steps/${step.id}`,'PATCH',{status:'completed',reason:values.reason,agent_name:values.agent_name,completion_at:when.toISOString()});});
+ m.fields.append(textNode('p','completion-step-title',step.title));field(m.fields,'completion_at',t('completionDate'),{value:localDateTimeNow(),type:'datetime-local',required:true});field(m.fields,'reason',t('completionReason'),{multiline:true});field(m.fields,'agent_name',t('helper'),{hint:t('helperHint')});m.open();}
+async function changeLanguage(){
+ const next=getLanguage()==='en'?'ar':'en';if(editor.open)return;
+ if(previewData){setLanguage(next);render();return;}
+ try{const result=await mutate('/api/settings','PATCH',{language:next,expected_revision:state.revision,request_id:crypto.randomUUID()});state=result.data;setLanguage(next);render();}catch(e){announce(t(e.code||'save_failed'));}
+}
+async function boot(){try{state=previewData || await readState();setLanguage(state.settings?.language || 'en');render();}catch{main.replaceChildren(empty(t('loadFailed'),t('connection'),button(t('retry'),boot,'button primary')));}}
+
+// Design review only. Uses fictional fixtures; no API or persistence calls.
+function rtext(en,ar){return getLanguage()==='ar'?ar:en;}
+function reviewTitle(){return location.hash==='#achievements'?rtext('Achievements','الإنجازات'):location.hash==='#projects'?t('projects'):location.hash==='#backup'?rtext('Backup & restore','النسخ الاحتياطي والاستعادة'):t('overview');}
+function renderHeader(){
+ baseRenderHeader();
+ const nav=document.querySelector('.sidebar-nav');nav.replaceChildren();
+ for(const [route,label,symbol] of [['overview',t('overview'),'grid'],['projects',t('projects'),'folder'],['achievements',rtext('Achievements','الإنجازات'),'award']]){
+  const link=el('a',`sidebar-link ${location.hash===`#${route}`||(!location.hash&&route==='overview')?'selected':''}`);link.href=`#${route}`;link.append(icon(symbol),el('span','',label));nav.append(link);
+ }
+ const local=document.querySelector('.sidebar-storage');const backup=el('a','sidebar-link backup-link');backup.href='#backup';backup.append(icon('download'),el('span','',rtext('Backup & restore','النسخ الاحتياطي والاستعادة')));local.before(backup);
+ local.replaceChildren(icon('lock'),el('div','',rtext('Saved on this laptop. Your own space, kept locally.','محفوظ على اللابتوب. مساحتج الخاصة، محفوظة محليًا.')));
+ const headerMark=el('a','header-mark');headerMark.href='#overview';headerMark.setAttribute('aria-label',t('brand'));headerMark.append(icon('check'));document.querySelector('.header-end').append(headerMark);
+ document.querySelector('.breadcrumb-current').textContent=currentProject?.title||reviewTitle();
+ const notice=document.getElementById('preview-notice');notice.hidden=false;notice.replaceChildren(el('strong','',rtext('DESIGN REVIEW','معاينة التصميم')),el('span','',rtext('Fictional examples · Nothing is saved · Not published','أمثلة خيالية · بدون حفظ · غير منشور')));
+}
+function reviewHero(title,action){const hero=el('div','workspace-hero');const text=el('div');text.append(el('p','workspace-date',rtext('Sunday, 25 October 2026','الأحد، ٢٥ أكتوبر ٢٠٢٦')),el('h1','',title));hero.append(text);if(action)hero.append(action);return hero;}
+function reviewProjectList(){const grid=el('div','projects-grid');state.projects.forEach((p,i)=>grid.append(projectCard(p,i)));return grid;}
+function reviewGoalList(goals){const list=el('div','review-goals');for(const goal of goals){const p=state.projects.find(p=>p.id===goal.project_id);const row=el('article','goal-progress-card');const body=el('div','goal-progress-body');body.append(button(goal.title,()=>openGoal(p.id,goal.id),'goal-progress-link'),textNode('p','goal-project-name',p.title),el('span','goal-meta',t('completedOf',{done:stepProgress(state.steps,goal.id).done,total:stepProgress(state.steps,goal.id).total})));body.append(badge(t(goal.status==='completed'?'completed':'active'),goal.status==='completed'?'completed':'neutral'));row.append(progressRing(stepProgress(state.steps,goal.id)),body);list.append(row);}return list;}
+function reviewPanel(title,sub=null){const p=el('section','review-panel');p.append(heading(title,sub));return p;}
+function reviewNewGoal(){const m=modal(t('newGoal'),rtext('Choose the project this goal belongs to.','اختاري المشروع اللي يتبعه الهدف.'),t('createGoal'),async()=>{});const wrap=el('div','field');const label=el('label','field-label',t('projects'));label.htmlFor='review-project';const select=el('select','input');select.id='review-project';for(const p of state.projects){const o=el('option','',p.title);o.value=p.id;select.append(o);}wrap.append(label,select);m.fields.append(wrap);field(m.fields,'title',t('goalTitle'),{required:true});m.open();}
+function renderOverview(){
+ main.append(reviewHero(t('overview'),button(rtext('New goal','هدف يديد'),reviewNewGoal,'button primary','plus')));
+ const metrics=el('section','stats-row review-stats');metrics.setAttribute('aria-label',t('overview'));
+ metrics.append(stat(t('activeGoals'),state.goals.filter(g=>g.status==='active').length,'target'),stat(rtext('Goals completed this week','أهداف اكتملت هالأسبوع'),1,'award'),stat(rtext('Upcoming deadlines','المواعيد القريبة'),2,'calendar'),stat(rtext('Steps completed this week','خطوات اكتملت هالأسبوع'),2,'check'));
+ main.append(metrics);const layout=el('div','review-layout'),left=el('div'),right=el('aside','review-aside');
+ const projects=el('section');projects.append(heading(t('yourProjects'),null,button(rtext('Add project','إضافة مشروع'),()=>showCreate('project'),'button text-button','plus')),reviewProjectList());left.append(projects);
+ const active=reviewPanel(t('activeGoals'),rtext('Your next goals, with their progress.','أهدافج الياية، ووين وصلت.'));active.append(reviewGoalList(state.goals.filter(g=>g.status==='active')));left.append(active);
+ const week=reviewPanel(rtext('This week','هالأسبوع'),rtext('25–31 October · Sunday–Saturday','٢٥–٣١ أكتوبر · الأحد–السبت'));week.append(activityList(state.entries.filter(e=>e.occurred_at>='2026-10-25'),state,{showProject:true,limit:4}));left.append(week);
+ const deadlines=reviewPanel(rtext('Upcoming & overdue','المواعيد القريبة والمتأخرة'));
+ for(const [title,project,date,late] of [['Choose a desk layout','Home refresh','24 Oct',true],['First issue','Studio journal','28 Oct',false],['Small experiment','Learning notes','30 Oct',false]]){const row=el('div','deadline-item');const body=el('div');body.append(textNode('strong','',title),textNode('p','section-sub',project));row.append(icon('calendar'),body,badge(late?rtext('Overdue','متأخر'):date,late?'overdue':'neutral'));deadlines.append(row);}right.append(deadlines);
+ const today=reviewPanel(rtext('Today','اليوم'),rtext('A small place to start.','خطوة بسيطة تبدين فيها.'));
+ for(const [name,project,tag] of [['Outline the opening story','Studio journal',rtext('Carried over','من الأيام السابقة')],['Compare two desk layouts','Home refresh',rtext('Planned today','مخطط لليوم')]]){const row=el('div','today-item');row.append(icon('arrow'),textNode('strong','',name),textNode('p','section-sub',project),badge(tag,'neutral'));today.append(row);}today.append(el('p','review-footnote',rtext('Unfinished work stays here until you finish or reschedule it.','الشغل الباقي يظل ظاهر لين تخلصينه أو تغيّرين موعده.')));right.append(today);
+ const next=reviewPanel(t('pickUp'));for(const p of state.projects.filter(p=>p.next_action)){const a=el('a','review-next');a.href=`#project/${p.id}`;a.append(textNode('strong','',p.next_action),textNode('p','section-sub',p.title));next.append(a);}right.append(next);layout.append(left,right);main.append(layout);
+}
+function reviewAchievements(){
+ main.append(reviewHero(rtext('Achievements','الإنجازات')));const intro=el('p','review-intro',rtext('Every step counts. Keep your progress and the story behind it.','كل خطوة لها قيمة. إنجازج وتفاصيله يظلون محفوظين.'));main.append(intro);
+ const tabs=el('div','review-tabs');const content=el('div');
+ function show(which){tabs.querySelectorAll('button').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.view===which)));content.replaceChildren();
+  if(which==='progress'){content.append(heading(rtext('Goal progress','التقدم بالأهداف'),rtext('See what is done and what remains. Completing a goal stays your decision.','شوفي شنو خلص وشنو باقي. إكمال الهدف يظل قرارج.')),reviewGoalList(state.goals));}
+  else{const done=state.entries.filter(e=>['step_completed','goal_completed'].includes(e.action));content.append(heading(rtext('Saved achievements','إنجازات محفوظة'),rtext('Completed goals and steps, each with its date.','أهداف وخطوات مكتملة، كل وحدة بتاريخها.')),activityList(done,state,{showProject:true}));}}
+ for(const [id,en,ar] of [['done','Completed work','الشغل المنجز'],['progress','Goal progress','التقدم بالأهداف']]){const b=button(rtext(en,ar),()=>show(id),'button secondary');b.dataset.view=id;tabs.append(b);}main.append(tabs,content);show('done');
+}
+function reviewBackup(){main.append(reviewHero(rtext('Backup & restore','النسخ الاحتياطي والاستعادة')),el('p','review-intro',rtext('Keep a copy of your work, notes, and progress.','احتفظي بنسخة من شغلج وملاحظاتج وتقدمج.')));const layout=el('div','projects-grid');for(const [title,sub,label] of [[rtext('Export backup','حفظ نسخة احتياطية'),rtext('Projects, goals, steps, notes, and history in one file.','المشاريع والأهداف والخطوات والملاحظات والتاريخ بملف واحد.'),rtext('Export backup','تصدير النسخة')],[rtext('Restore backup','استرجاع نسخة'),rtext('Review the file before replacing saved work. Keep a safety copy first.','راجعي الملف قبل استبدال البيانات. تُحفظ نسخة أمان أولًا.'),rtext('Choose backup file','اختيار ملف النسخة')]]){const panel=reviewPanel(title,sub);const b=button(label,null,'button secondary','download');b.disabled=true;panel.append(b);layout.append(panel);}main.append(layout,el('p','review-footnote',rtext('Design review: export and restore are not connected in this preview.','معاينة تصميم: التصدير والاسترجاع غير مربوطين في هالمعاينة.')));}
+function render(){if(!state)return;if(['#projects','#achievements','#backup'].includes(location.hash)){currentProject=null;renderHeader();main.replaceChildren();if(location.hash==='#projects'){main.append(reviewHero(t('projects'),button(t('addProject'),()=>showCreate('project'),'button primary','plus')),reviewProjectList());}else if(location.hash==='#achievements')reviewAchievements();else reviewBackup();document.title=`${reviewTitle()} · Work Tracker · Design review`;return;}baseRender();}
+
+boot();</script></body>
+</html>

@@ -1,0 +1,17 @@
+/devpost/learner-profile.md
+.env
+.env.*
+!.env.example
+
+/data/
+/backups/
+/qa/
+/runtime-env/
+*.sqlite3*
+__pycache__/
+
+# Local assistant setup and course tooling are not application source.
+/.agents/
+/.claude/
+/agent/
+/skills-lock.json

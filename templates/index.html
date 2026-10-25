@@ -1,0 +1,23 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="color-scheme" content="light">
+  <meta name="request-token" content="{{ request_token }}">
+  <title>Work Tracker</title>
+  <link rel="stylesheet" href="/static/styles.css">
+  <link rel="stylesheet" href="/static/workspace-theme.css">
+  <script type="module" src="/static/js/app.js"></script>
+</head>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <aside id="workspace-sidebar"></aside>
+  <header id="app-header"></header>
+  <div id="preview-notice" hidden></div>
+  <main id="main" tabindex="-1"><div class="loading">Opening your workspace…</div></main>
+  <footer id="app-footer"></footer>
+  <div id="toast" role="status" aria-live="polite" hidden></div>
+  <dialog id="editor" aria-labelledby="editor-title"></dialog>
+</body>
+</html>
