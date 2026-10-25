@@ -1,10 +1,10 @@
 {
-  "version": "1.0.0",
+  "version": "1.0.1",
   "source_commit": "50a18613e095b7fde53bd4ceca3488ff2197c145",
   "environment": "Browser-local static application; Python static server; IndexedDB; no production deployment",
   "files": {
     ".gitignore": "89ef6f8c6b9d9c5c2d1794f4369c09538ebe859ff4e49f20819c02e285d126bc",
-    "README.md": "9646cd7aecf401155dc106a0ed7b784ef955ee7519236492222b21bd51720295",
+    "README.md": "282a773e67b87e0ae4f94d33ec85d920a0f56c186649f5a25d75f6e96d6b5fcc",
     "app.py": "38a0c31625e1cc184063685f888879a8d1ef80dd9af89585e5f6a7173f30ea89",
     "design-review/dashboard.css": "7fe30f0df43590d0fe972a8fb991422f9fa934c729b0f9aeb18c0aa8aad5d138",
     "design-review/dashboard.js": "601876671c84e178323130a1518ed21d25dedeb63374505d252ac4aaee81d38f",
@@ -68,6 +68,7 @@
     "tracker/schema.sql": "86eae99b512a04a4a47f7d0ea7f2d2f5fce40c63aa2bc341ccea9b06cf86c7a6",
     "tracker/service.py": "d243dced0d47cd70145c653881c0ff94cf2be7948fc15732e667d4882b022ba3",
     "tracker/storage.py": "499dfec4a4bfe18fc4351c62f0205ccfe7b7d4aa3153d23a1344417f220e7d64",
-    "tracker/web.py": "47eeeb07363246ba7ff9dc9ebc71883e03bfaca0d14f9a4dcda71073caf3f0e4"
+    "tracker/web.py": "47eeeb07363246ba7ff9dc9ebc71883e03bfaca0d14f9a4dcda71073caf3f0e4",
+    "LICENSE": "d55ea9b8807c48372a677ddd7bae8b2f7dd1c4fd96040972b9ab8de0ddfc84ad"
   }
 }

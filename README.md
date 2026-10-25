@@ -58,3 +58,7 @@ Historical verification of the current app recorded 25 JavaScript checks, 33 ear
 This is a clean public source snapshot for the Build With AI: Basics submission. Application assets match local source commit `50a18613e095b7fde53bd4ceca3488ff2197c145`. The README and one local path in the review guide were adjusted for public use. Private learner information, recordings, workspace records, backups, installed runtimes, and local QA artifacts are excluded. Local development history is preserved separately and is not rewritten by this snapshot.
 
 `RELEASE-MANIFEST.json` records SHA-256 hashes for the included files. There is no hosted application link in this source-only release.
+
+## License
+
+[MIT](LICENSE), authorized by the project owner for this submission.
