@@ -1,0 +1,18 @@
+{
+  "version": "1.0.2",
+  "environment": "ChatGPT Sites public; browser-local IndexedDB",
+  "project_id": "appgprj_6adf7cde72d881918f3d3cd2736b58ce",
+  "application_source_tag": "v1.0.1",
+  "files": {
+    ".openai/hosting.json": "ad6f2bbd88b02f5f302f39843fff963ddff5ec6949dd0c6778db01d74508f564",
+    "LICENSE": "d55ea9b8807c48372a677ddd7bae8b2f7dd1c4fd96040972b9ab8de0ddfc84ad",
+    "README.md": "2b6181cc3d7dbb2426d7728a04e60363a1508862a918153d6c855c9fa52c189e",
+    "dist/app.css": "2df0871f399e178bd01b731235816efc74a2b109759bd84dd8285df5d671d3ec",
+    "dist/index.html": "265418c0e99d7b9f0c5cbebbdb2aeecbbb1779afd110a99ffbb9a7f9b7da8bdc",
+    "dist/js/api.js": "e6ea2488dd630a75d0e5bd359d3f4581a8d85121f61afc40ddcc40eb53afc53c",
+    "dist/js/app.js": "89026d2e9f607ce1f1eacb2f8fe707cb147fff294ee585841fd1ec32ae929e43",
+    "dist/js/planning.js": "f2ce26e681c240105dca6477881207032e1912532f360fe8cb79620a0a255e7c",
+    "dist/js/store-core.js": "baae9fd36f325e9f49fa822e42ec919413066108daa6ec2d8ef81f51ee19b2ba",
+    "dist/mark.svg": "4dc5a9de4b06d098b257d2a92c456bd5fa89f1e85f545068322e4a8f489cfda1"
+  }
+}
