@@ -1,19 +1,19 @@
 {
-  "version": "1.0.3",
+  "version": "1.0.4",
   "environment": "ChatGPT Sites public; browser-local IndexedDB",
   "project_id": "appgprj_6adf7cde72d881918f3d3cd2736b58ce",
-  "application_source_tag": "v1.0.3",
+  "application_source_tag": "v1.0.4",
   "files": {
     ".openai/hosting.json": "ad6f2bbd88b02f5f302f39843fff963ddff5ec6949dd0c6778db01d74508f564",
     "LICENSE": "d55ea9b8807c48372a677ddd7bae8b2f7dd1c4fd96040972b9ab8de0ddfc84ad",
-    "README.md": "0ece794881f2f0bcbe8fe19890c8f33069e6244196e7846fea5a56c342f9d4bb",
+    "README.md": "fca85d9afa4cf2320a77cf6ce49e8a25b9b8e48347ffb2fdadb2573dfa04fc2f",
     "dist/app.css": "2df0871f399e178bd01b731235816efc74a2b109759bd84dd8285df5d671d3ec",
-    "dist/index.html": "816bf6acd41deed7f5f8743ab8947d33768d9521c1599f76049de7c40d8553ac",
-    "dist/js/api.js": "8672d9e9567d3564e831e9eef33e7288ca3768886e291d1824dbd444448eff3f",
-    "dist/js/app.js": "0db190660e5b42f41713530cb593d4e718b182ca3bcba15e97e1d11b33dcc101",
-    "dist/js/dates.js": "8154eef61febb39596b5b7d0293a0d897169d5869ad975b2cec7d68469a2d13e",
+    "dist/index.html": "b90d8d5b5128e60374db921537bce749ab166cfb88d2f6f06da26dfabe01e4e8",
+    "dist/js/api.js": "a306912a0ce67aa6859529a1d5d38f26e1a2f4ae0011d6f9ec720e9119d7769c",
+    "dist/js/app.js": "2a0ab2341aacce4cedf64b5f5865554b255dab63684e2c6f01dcd50e31216bbd",
+    "dist/js/dates.js": "61db790ae7dba46f6ee944503be34495c7b3e1478fcc51ec1f85d0a0e719a303",
     "dist/js/planning.js": "f2ce26e681c240105dca6477881207032e1912532f360fe8cb79620a0a255e7c",
-    "dist/js/recovery-core.js": "4645141a2b680d104a6c071b63743cf43d5f8d5cad4bcfb4c9d5529f1cab3294",
+    "dist/js/recovery-core.js": "3a9df7384ffbdfae05c1f0390d28994169bef1085959065158f96dfad7893835",
     "dist/js/store-core.js": "baae9fd36f325e9f49fa822e42ec919413066108daa6ec2d8ef81f51ee19b2ba",
     "dist/mark.svg": "4dc5a9de4b06d098b257d2a92c456bd5fa89f1e85f545068322e4a8f489cfda1"
   }

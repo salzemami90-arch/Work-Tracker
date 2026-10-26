@@ -1,4 +1,4 @@
-import {ApiError,inspectBackup} from './store-core.js?v=1.0.3';
+import {ApiError,inspectBackup} from './store-core.js?v=1.0.4';
 
 // Lossless, deterministic representation of the record types this app writes,
 // including malformed values. Never fall back to a lossy JSON.stringify guard.

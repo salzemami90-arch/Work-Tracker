@@ -1,4 +1,4 @@
-import {ApiError} from './store-core.js?v=1.0.3';
+import {ApiError} from './store-core.js?v=1.0.4';
 
 export function localDateInput(value){
  const d=new Date(value);

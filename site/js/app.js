@@ -1,6 +1,6 @@
-import {ApiError,readState,mutate,exportBackup,inspectBackup,restoreBackup,inspectCorruptWorkspace,restoreCorruptBackup,listRecoveryCopies,exportRecoveryCopy} from './api.js?v=1.0.3';
-import {dayKey,overviewData} from './planning.js?v=1.0.3';
-import {localDateInput,resolveLocalTimestamp} from './dates.js?v=1.0.3';
+import {ApiError,readState,mutate,exportBackup,inspectBackup,restoreBackup,inspectCorruptWorkspace,restoreCorruptBackup,listRecoveryCopies,exportRecoveryCopy} from './api.js?v=1.0.4';
+import {dayKey,overviewData} from './planning.js?v=1.0.4';
+import {localDateInput,resolveLocalTimestamp} from './dates.js?v=1.0.4';
 let language = 'en';
 const messages = {
  en: {
@@ -517,7 +517,10 @@ function renderBackup(recoveryToken=null){main.append(pageHero(rtext('Backup & r
 function render(){if(!state)return;if(['#projects','#achievements','#history','#backup'].includes(location.hash)){currentProject=null;renderHeader();main.replaceChildren();if(location.hash==='#projects')main.append(pageHero(t('projects'),button(t('addProject'),()=>showCreate('project'),'button primary','plus')),projectList());else if(location.hash==='#achievements')renderAchievements();else if(location.hash==='#history')renderHistory();else renderBackup();document.title=`${pageTitle()} · Work Tracker`;return;}baseRender();}
 Object.assign(messages.en,{storage_unavailable:'Browser storage is unavailable. Check storage settings and retry. The draft remains available.',storage_invalid:'Saved data could not be read. It has not been reset. Use a backup or retry in the original browser.',invalid_backup:'This is not a valid Work Tracker backup. Current work has not changed.',unfinished_steps:'This goal still has unfinished steps.',goalCompleted:'Goal completed',goalReopened:'Goal reopened',datesUpdated:'Dates updated'});
 Object.assign(messages.ar,{storage_unavailable:'تعذر الحفظ في المتصفح. يلزم التحقق من إعدادات التخزين وإعادة المحاولة. المسودة ما زالت متاحة.',storage_invalid:'تعذرت قراءة البيانات المحفوظة. لم تُحذف البيانات. يمكن إعادة المحاولة في المتصفح الأصلي أو استخدام نسخة احتياطية.',invalid_backup:'ملف النسخة الاحتياطية غير صالح. لم تتغير البيانات الحالية.',unfinished_steps:'يحتوي الهدف على خطوات غير مكتملة.',goalCompleted:'اكتمل الهدف',goalReopened:'تمت إعادة فتح الهدف',datesUpdated:'تم تحديث المواعيد'});
-window.addEventListener('focus',async()=>{if(dirty||saving||editor.open)return;try{const latest=await readState();if(dirty||saving||editor.open)return;state=latest;setLanguage(state.settings.language);render();}catch(e){announce(t(e.code||'save_failed'));}});
+// A native file picker can return focus before its change event (Safari).
+// Keep the backup input and reviewed selection intact; restore still checks revision.
+function preserveFocusDraft(){return dirty||saving||editor.open||!!document.querySelector('#backup-file');}
+window.addEventListener('focus',async()=>{if(preserveFocusDraft())return;try{const latest=await readState();if(preserveFocusDraft()||latest.revision===state?.revision)return;state=latest;setLanguage(state.settings.language);render();}catch(e){announce(t(e.code||'save_failed'));}});
 setInterval(()=>{if(!dirty&&!saving&&!editor.open&&(!location.hash||location.hash==='#overview'))render();},60000);
 
 // Flexible plans and contextual records use the existing cards and modal form.

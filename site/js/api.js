@@ -1,6 +1,6 @@
 /** IndexedDB is local to this browser and site address. No network or shared records. */
-import {ApiError,emptyState,requestInfo,applyMutation,validateState,makeBackup,inspectBackup,prepareRestore} from './store-core.js?v=1.0.3';
-import {encodeRawRecord,rawRecordFingerprint,prepareCorruptRestore} from './recovery-core.js?v=1.0.3';
+import {ApiError,emptyState,requestInfo,applyMutation,validateState,makeBackup,inspectBackup,prepareRestore} from './store-core.js?v=1.0.4';
+import {encodeRawRecord,rawRecordFingerprint,prepareCorruptRestore} from './recovery-core.js?v=1.0.4';
 export {ApiError,inspectBackup};
 const DATABASE='work-tracker-browser-v1';
 const VERSION=1;
